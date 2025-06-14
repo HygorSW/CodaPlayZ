@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>API Spotify - Buscar Música</title>
+</head>
+
+<body>
+
+    <h1>Buscar Música no Spotify</h1>
+    <input type="text" id="input_musica" placeholder="Digite o nome da música">
+    <button onclick="buscarIdDaMusica()">Buscar</button>
+
+    <div id="resultado"></div>
+
+</body>
+
+</html>
+
+<script>
+    const token = 'SEU_TOKEN_AQUI';
+
+    function buscarIdDaMusica() {
+        var nomeMusica = input_musica.value
+
+        if (nomeMusica == "") {
+            alert("Digite o nome da música!")
+            return
+        }
+
+        const url = `https://api.spotify.com/v1/search?q=${encodeURIComponent(nomeMusica)}&type=track`;
+
+        fetch(url, {
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(res => res.json())
+            .then(dados => {
+                if (dados.tracks.items.length == 0) {
+                    alert("Música não encontrada!")
+                    return
+                }
+
+                console.log(dados)
+
+                var musica = dados.tracks.items[0]
+                var id = musica.id
+                var nome = musica.name
+                var artista = musica.artists[0].name
+                var imagem = musica.album.images[0].url
+
+                console.log('🎧 ID da música:', id)
+
+                resultado.innerHTML = `
+                        <p><strong>Nome:</strong> ${nome}</p>
+                        <p><strong>Artista:</strong> ${artista}</p>
+                        <p><strong>ID da Música:</strong> ${id}</p>
+                        <img src="${imagem}" style="width: 300px;">
+                    `
+            })
+    }
+</script>
