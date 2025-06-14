@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | CodaPlayZ</title>
+    <link rel="stylesheet" href="styles/login.css">
+    <link rel="shortcut icon" href="" type="image/x-icon">
+</head>
+
+<body>
+    <div class="entrar">
+        <div class="titulo">
+            <h1>SIGN-IN</h1>
+        </div>
+        <div class="textos">
+            <div class="email">
+                <p>email:</p>
+                <input type="text" id="input_email" class="input" placeholder="exemplo@gmail.com">
+            </div>
+            <div class="senha">
+                <p>senha:</p>
+                <input type="password" id="input_senha" class="input" placeholder="********">
+            </div>
+            <div id="div_mensagem"></div>
+            <div class="botao">
+                <p>Não possui conta?<a href="cadastro.html"> registre-se aqui</a></p>
+                <button id="btn-entrar" onclick="autenticar()">ENTRAR</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+<script>
+    function autenticar() {
+        var email = input_email.value
+        var senha = input_senha.value
+
+        if (email == `` || senha == ``) {
+            alert(`Preencha todos os campos`)
+            div_mensagem = `Preencha todos os campos`
+        }
+        else if (!email.includes('@') || !email.includes('.')) {
+            alert('O email deve conter @ e .')
+            div_mensagem = `O email deve conter @ e .`
+        } else if (email.indexOf('@') === 0 || email.lastIndexOf('.') === email.length - 1) {
+            alert('Email inválido: @ não pode ser o primeiro caractere e . não pode ser o último')
+            div_mensagem = `Email inválido: @ não pode ser o primeiro caractere e . não pode ser o último`
+        } else if (senha.length < 8) {
+            alert('A senha deve conter pelo menos 8 caracteres')
+            div_mensagem = `A senha deve conter pelo menos 8 caracteres`
+        } else {
+
+            fetch("/usuarioRoute/autenticar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    emailServer: email,
+                    senhaServer: senha
+                })
+            }).then(function (resposta) {
+                console.log("ESTOU NO THEN DO entrar()!")
+
+                if (resposta.ok) {
+                    console.log(resposta);
+
+                    resposta.json().then(json => {
+                        console.log(json);
+                        console.log(JSON.stringify(json));
+                        sessionStorage.EMAIL_USUARIO = json.email;
+                        sessionStorage.NOME_USUARIO = json.nome;
+                        sessionStorage.ID_USUARIO = json.idUsuario;
+
+                        alert(`Login bem sucedido`)
+                        window.location = ""
+                    });
+
+                } else {
+
+                    console.log("Houve um erro ao tentar realizar o login!")
+
+                    resposta.text().then(texto => {
+                        console.error(texto);
+                    });
+                }
+
+            }).catch(function (erro) {
+                console.log(erro);
+            })
+
+            return false;
+        }
+
+    }
+</script>
