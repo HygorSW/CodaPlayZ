@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>API Spotify - Buscar Artista ao Digitar</title>
+</head>
+
+<body>
+
+    <h1>Buscar Artista no Spotify</h1>
+    <input type="text" id="input_musica" placeholder="Digite o nome do artista" oninput="buscarArtista()">
+    <div id="resultado"></div>
+
+</body>
+
+</html>
+
+<script>
+    var token = 'BQDd46wmzVhd3IKbsYLgZ9TfM7zeES5X7l6h376y6G-Clv3L1u-I5Fa7_e0P6wsxVywyx0geXzPCVvQhwFGlX-64bqOLDlLpYypRMS85eG-gMfZrk9BMXLlQUhsX7-WUMOlcEyfMoS8';
+
+    var tempo = null
+
+    function buscarArtista() {
+        clearTimeout(tempo)
+        tempo = setTimeout(function () {
+            var nomeArtista = input_musica.value
+
+            if (nomeArtista == "") {
+                resultado.innerHTML = ""
+                return
+            }
+
+            fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(nomeArtista)}*&type=artist`, {
+                method: "GET",
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then(response => response.json())
+                .then(dados => {
+                    if (dados.artists.items.length == 0) {
+                        resultado.innerHTML = "<p>Nenhum artista encontrado.</p>"
+                        return
+                    }
+
+                    console.log(dados)
+
+                    resultado.innerHTML = ""
+
+                    for (var i = 0; i < dados.artists.items.length; i++) {
+                        var artista = dados.artists.items[i]
+
+                        var nome = artista.name
+                        var id = artista.id
+                        var imagem = ""
+
+                        if (artista.images.length > 0) {
+                            imagem = artista.images[0].url
+                        }
+
+                        resultado.innerHTML += `
+                            <div>
+                                <img src="${imagem}" width="100"><br>
+                                <strong>Nome:</strong> ${nome}<br>
+                                <strong>ID do Artista:</strong> ${id}<br>
+                                <a href="https://open.spotify.com/artist/${id}" target="_blank">Ver no Spotify</a>
+                                <hr>
+                            </div>
+                        `
+                    }
+                })
+                .catch(function (erro) {
+                    console.log(erro)
+                    resultado.innerHTML = "<p>Erro na busca.</p>"
+                })
+
+        }, 500)
+    }
+</script>

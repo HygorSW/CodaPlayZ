@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Spotify Player Simples</title>
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>
+</head>
+
+<body>
+
+    <h1>Buscar e Tocar Música</h1>
+
+    <input type="text" id="input_musica" placeholder="Digite o nome da música">
+    <button onclick="buscarMusica()">Buscar</button>
+
+    <div id="resultado"></div>
+
+    <script>
+        var token = 'BQDd46wmzVhd3IKbsYLgZ9TfM7zeES5X7l6h376y6G-Clv3L1u-I5Fa7_e0P6wsxVywyx0geXzPCVvQhwFGlX-64bqOLDlLpYypRMS85eG-gMfZrk9BMXLlQUhsX7-WUMOlcEyfMoS8'
+        var deviceId = null
+
+        window.onSpotifyWebPlaybackSDKReady = () => {
+            var player = new Spotify.Player({
+                name: 'Player Web',
+                getOAuthToken: cb => cb(token)
+            })
+
+            player.addListener('ready', e => {
+                deviceId = e.device_id
+                console.log('Player pronto:', deviceId)
+            })
+
+            player.connect()
+        }
+
+        function buscarMusica() {
+            var nome = input_musica.value
+
+            fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(nome)}&type=track`, {
+                headers: { 'Authorization': 'Bearer ' + token }
+            })
+                .then(res => res.json())
+                .then(dados => {
+                    var resultado = document.getElementById('resultado')
+                    resultado.innerHTML = ""
+
+                    var musicas = dados.tracks.items
+
+                    for (var i = 0; i < musicas.length; i++) {
+                        var musica = musicas[i]
+                        var nome = musica.name
+                        var artista = musica.artists[0].name
+                        var imagem = musica.album.images[0].url
+                        var uri = musica.uri
+
+                        resultado.innerHTML += `
+                        <div>
+                            <img src="${imagem}" width="100"><br>
+                            <b>${nome}</b> - ${artista}<br>
+                            <button onclick="tocar('${uri}')">Tocar</button>
+                            <hr>
+                        </div>
+                    `
+                    }
+                })
+        }
+
+        function tocar(uri) {
+            if (!deviceId) {
+                alert('Player não está pronto. Aguarde...')
+                return
+            }
+
+            fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+                method: 'PUT',
+                body: JSON.stringify({ uris: [uri] }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+        }
+
+    </script>
+
+</body>
+
+</html>
