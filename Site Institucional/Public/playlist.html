@@ -1,63 +1,17 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro | CodaPlayZ</title>
-    <link rel="stylesheet" href="styles/cadastro.css">
-    <link rel="shortcut icon" href="" type="image/x-icon">
+    <title>Document</title>
 </head>
 
 <body>
-
-    <div class="entrar">
-
-        <div class="titulo">
-            <h1>Cadastro de Playlist</h1>
-        </div>
-
-        <div class="textos">
-
-            <div class="nome">
-                <p>nome:</p>
-                <input type="text" id="input_nome" class="input" placeholder="exemplo">
-            </div>
-
-            <div id="div_mensagem"></div>
-            <button onclick="cadastrar()">cadastrar</button>
-        </div>
-    </div>
 
 </body>
 
 </html>
 <script>
-
-    function cadastrar() {
-        var idUsuario = sessionStorage.ID_USUARIO;
-        var nomePlaylist = input_nome.value;
-
-        if (nomePlaylist == ``) {
-            alert(`Preencha todos os campos`)
-            div_mensagem = `Preencha todos os campos`
-        } else if (nomePlaylist.length > 30) {
-            alert(`O nomePlaylist pode ter no maximo 30 letras`)
-        } else if (nomePlaylist.length < 3) {
-            alert('A senha deve conter pelo menos 3 caracteres')
-            div_mensagem = `A senha deve conter pelo menos 8 caracteres`
-        } else {
-            fetch('/playlistRoute/cadastrarPlaylist', {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    nomePlaylistServer: nomePlaylist,
-                    usuarioServer: idUsuario
-                })
-            })
-            alert(`Cadastro realizado com sucesso!`)
-        }
-    }
+    
 </script>
