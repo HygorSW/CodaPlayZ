@@ -13,7 +13,7 @@ html {
 }
 
 body{
-  background-image: url(../Elements/Frame\ 7.png);
+  background-image: url(../assets/icons/Frame\ 7.png);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -25,6 +25,7 @@ body img{
   width: 680px;
   height: 630px;
   margin-left: 30vh;
+  padding-right: 3vh;
   top: 0;
 }
 
@@ -66,9 +67,14 @@ body img{
 
 .titulo h1{
   font-size: 64px;
+  margin-top: 10vh;
   background: linear-gradient(90deg, #5600D3, #B125E3);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.textos{
+  margin-top: 6vh;
 }
 
 .email{
@@ -92,7 +98,7 @@ body img{
 }
 
 .cadastrar{
-  margin-top: 15vh;
+  margin-top: 12vh;
   display: flex;
   justify-content: end;
 }
