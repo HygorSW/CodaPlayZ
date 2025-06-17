@@ -1,63 +1,93 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro | CodaPlayZ</title>
-    <link rel="stylesheet" href="styles/cadastro.css">
-    <link rel="shortcut icon" href="" type="image/x-icon">
+    <title>Document</title>
 </head>
 
 <body>
-
-    <div class="entrar">
-
-        <div class="titulo">
-            <h1>Cadastro de Playlist</h1>
-        </div>
-
-        <div class="textos">
-
-            <div class="nome">
-                <p>nome:</p>
-                <input type="text" id="input_nome" class="input" placeholder="exemplo">
-            </div>
-
-            <div id="div_mensagem"></div>
-            <button onclick="cadastrar()">cadastrar</button>
-        </div>
-    </div>
 
 </body>
 
 </html>
 <script>
+    var token = ''
+    var idPlaylist = sessionStorage.PLAYLIST
 
-    function cadastrar() {
-        var idUsuario = sessionStorage.ID_USUARIO;
-        var nomePlaylist = input_nome.value;
+    function buscarMusica() {
+        fetch(`/musicaRoute/buscarMusica?idPlaylist=${idPlaylist}`, {
+            method: "GET"
+        })
+            .then(response => response.json())
+            .then(dadosMusica => {
+                dadosMusica.forEach(resultado => {
+                    fetch(`https://api.spotify.com/v1/tracks/${dadosMusica.idSpotify}`, {
+                        headers: { 'Authorization': 'Bearer ' + token }
+                    })
+                        .then(res => res.json())
+                        .then(dados => {
+                            var resultado = document.getElementById('resultado')
+                            resultado.innerHTML = ""
 
-        if (nomePlaylist == ``) {
-            alert(`Preencha todos os campos`)
-            div_mensagem = `Preencha todos os campos`
-        } else if (nomePlaylist.length > 30) {
-            alert(`O nomePlaylist pode ter no maximo 30 letras`)
-        } else if (nomePlaylist.length < 3) {
-            alert('A senha deve conter pelo menos 3 caracteres')
-            div_mensagem = `A senha deve conter pelo menos 8 caracteres`
-        } else {
-            fetch('/playlistRoute/cadastrarPlaylist', {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    nomePlaylistServer: nomePlaylist,
-                    usuarioServer: idUsuario
+                            var musicas = dados.tracks.items
+
+                            for (var i = 0; i < musicas.length; i++) {
+                                var musica = musicas[i]
+
+                                var nome = musica.name
+                                var imagem = musica.album.images[0].url
+                                var uri = musica.uri
+                                var artista = musica.artists
+
+                                resultado.innerHTML += `
+                                    <div onclick="tocar('${uri}')">
+                                        <img src="${imagem}" width="100"><br>
+                                        <p>Nome:</p> ${nome}<br>
+                                    </div>
+                                        `
+
+                                artista.forEach(dadosArtista => {
+                                    div.innerHTML += `<p>Artista:</p> ${artista.name}<br>`
+                                })
+                            }
+                        })
+                        .catch(function (erro) {
+                            console.log(erro)
+                            resultado.innerHTML = "<p>Erro na busca.</p>"
+                        })
                 })
             })
-            alert(`Cadastro realizado com sucesso!`)
+    }
+
+    window.onSpotifyWebPlaybackSDKReady = () => {
+        var player = new Spotify.Player({
+            name: 'Player Web',
+            getOAuthToken: cb => cb(token)
+        })
+
+        player.addListener('ready', e => {
+            deviceId = e.device_id
+            console.log('Player pronto:', deviceId)
+        })
+
+        player.connect()
+    }
+
+    function tocar(uri) {
+        if (!deviceId) {
+            alert('Player não está pronto. Aguarde...')
+            return
         }
+
+        fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+            method: 'PUT',
+            body: JSON.stringify({ uris: [uri] }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        })
     }
 </script>

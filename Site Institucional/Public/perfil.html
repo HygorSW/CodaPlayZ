@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro | CodaPlayZ</title>
+    <link rel="stylesheet" href="styles/cadastro.css">
+    <link rel="shortcut icon" href="" type="image/x-icon">
+</head>
+
+<body>
+
+    <div class="entrar">
+
+        <div class="titulo">
+            <h1>Cadastro de Playlist</h1>
+        </div>
+
+        <div class="textos">
+
+            <div class="nome">
+                <p>nome:</p>
+                <input type="text" id="input_nome" class="input" placeholder="exemplo">
+            </div>
+
+            <div id="div_mensagem"></div>
+            <button onclick="cadastrar()">cadastrar</button>
+        </div>
+    </div>
+    <div>
+
+    </div>
+
+</body>
+
+</html>
+<script>
+    var idUsuario = sessionStorage.ID_USUARIO;
+
+    function cadastrarPlaylist() {
+        var nomePlaylist = input_nome.value;
+
+        if (nomePlaylist == ``) {
+            div_mensagem = `Preencha todos os campos`
+        } else if (nomePlaylist.length > 30) {
+            div_mensagem = `O nomePlaylist pode ter no maximo 30 letras`
+        } else if (nomePlaylist.length < 8) {
+            div_mensagem = `A senha deve conter pelo menos 8 caracteres`
+        } else {
+            fetch('/perfilRoute/cadastrarPlaylist', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    nomePlaylistServer: nomePlaylist,
+                    usuarioServer: idUsuario
+                })
+            })
+            alert(`Cadastro de playlist realizado com sucesso!`)
+        }
+    }
+
+    function buscarPlaylist() {
+        fetch(`/perfilRoute/buscarPlaylist?pkUsuario=${idUsuario}`, {
+            method: "GET"
+        })
+            .then(response => response.json())
+            .then(playlist => {
+                playlist.forEach(resultado => {
+                    div.innerHTML += `
+                    <button onclick="redirectPage('${playlist.idPlaylist}')">
+                        <img src="${imagem}"><br>
+                        <p>Nome:</p> ${nome}<br>
+                    </button>
+                    `
+                })
+            })
+    }
+
+    function redirectPage(idCaminhao, placa) {
+        sessionStorage.PLAYLIST = idPlaylist
+        window.location.href = `playlist.html`
+    }
+
+</script>

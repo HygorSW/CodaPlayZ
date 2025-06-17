@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>API Spotify - Buscar Música ao Digitar</title>
+</head>
+
+<body>
+
+    <h1>Buscar Música no Spotify</h1>
+    <input type="text" id="input_musica" placeholder="Digite o nome da música" oninput="buscarMusica()">
+    <div id="resultado"></div>
+
+</body>
+
+</html>
+
+<script>
+    var token = 'BQDd46wmzVhd3IKbsYLgZ9TfM7zeES5X7l6h376y6G-Clv3L1u-I5Fa7_e0P6wsxVywyx0geXzPCVvQhwFGlX-64bqOLDlLpYypRMS85eG-gMfZrk9BMXLlQUhsX7-WUMOlcEyfMoS8';
+
+    var tempo = null
+
+    function buscarMusica() {
+        clearTimeout(tempo)
+        tempo = setTimeout(function () {
+            var nomeMusica = input_musica.value
+
+            if (nomeMusica == "") {
+                resultado.innerHTML = ""
+                return
+            }
+
+            fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(nomeMusica)}*&type=track`, {
+                method: "GET",
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then(function (resposta) {
+                    return resposta.json()
+                })
+                .then(function (dados) {
+                    if (dados.tracks.items.length == 0) {
+                        resultado.innerHTML = "<p>Nenhuma música encontrada.</p>"
+                        return
+                    }
+
+                    resultado.innerHTML = ""
+
+                    for (var i = 0; i < dados.tracks.items.length; i++) {
+                        var musica = dados.tracks.items[i]
+
+                        var nome = musica.name
+                        var id = musica.id
+                        var artista = ""
+                        var imagem = ""
+
+                        if (musica.artists.length > 0) {
+                            artista = musica.artists[0].name
+                        } else {
+                            artista = "Desconhecido"
+                        }
+
+                        if (musica.album.images.length > 0) {
+                            imagem = musica.album.images[0].url
+                        } else {
+                            imagem = ""
+                        }
+
+                        resultado.innerHTML += `
+                            <div>
+                                <img src="${imagem}" width="100"><br>
+                                <strong>Nome:</strong> ${nome}<br>
+                                <strong>Artista:</strong> ${artista}<br>
+                                <strong>ID da Música:</strong> ${id}<br>
+                                <strong>ID da Música:</strong> ${musica.uri}<br>
+                                <a href="https://open.spotify.com/track/${id}" target="_blank">Ouvir no Spotify</a>
+                                <hr>
+                            </div>
+                        `
+                    }
+                })
+                .catch(function (erro) {
+                    console.log(erro)
+                    resultado.innerHTML = "<p>Erro na busca.</p>"
+                })
+
+        }, 500)
+    }
+</script>
