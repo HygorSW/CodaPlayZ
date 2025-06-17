@@ -8,10 +8,14 @@ CREATE TABLE usuario (
     senha VARCHAR(300) NOT NULL
 );
 
+CREATE TABLE musicasRecentes (
+    idMusica INT PRIMARY KEY AUTO_INCREMENT,
+    idSpotify VARCHAR(300)
+);
+
 CREATE TABLE playlist (
-    idPlaylist INT AUTO_INCREMENT,
+    idPlaylist INT PRIMARY KEY AUTO_INCREMENT,
     pkUsuario INT NOT NULL,
-    PRIMARY KEY (idPlaylist , pkUsuario),
     nome VARCHAR(300) NOT NULL,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT usuarioPlaylist FOREIGN KEY (pkUsuario)
