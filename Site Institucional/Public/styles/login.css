@@ -22,8 +22,7 @@ body{
   }
 
 body img{
-  width: 680px;
-  height: 630px;
+  width: 102vh;
   margin-left: 30vh;
   padding-right: 3vh;
   top: 0;
@@ -32,26 +31,39 @@ body img{
 .entrar{
   width: 100vh;
   padding: 5px;
+  display: flex;
+  flex-direction: column;
+  padding-left: 5vh;
 }
 
 .entrar input{
-  width: 400px;
-  height: 35px;
-  border: solid 1px;
-  border-image: linear-gradient(90deg, #5600D3, #B125E3) 1;
+  width: 63.5vh;
+  font-size: 3vh;
+  height: 7vh;
+  border: solid 1px #5600D3;;
+  /* border-image: linear-gradient(90deg, #5600D3, #B125E3) 1; */
   border-radius: 10px;
-  padding: 5px;
+  padding: 2vh;
+  padding-top: 2.5vh;
+  padding-bottom: 2.5vh;
   background: transparent;
+  color: white;
+}
+
+.entrar input:focus{
+  border: solid 1px #5600D3;
+  outline: none;
 }
 
 .entrar p {
   transform: translateY(8px);
+  font-size: 2.5vh;
   width: fit-content;
   padding-left: 5px;
   padding-right: 5px;
   color: white;
-  background: #232323;
-  margin-left: 3.5vh;  
+  background: #1A1A1A;
+  margin-left: 3vh;  
 }
 
 .logo{
@@ -66,15 +78,15 @@ body img{
 }
 
 .titulo h1{
-  font-size: 64px;
-  margin-top: 10vh;
+  font-size: 70px;
+  margin-top: 8vh;
   background: linear-gradient(90deg, #5600D3, #B125E3);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .textos{
-  margin-top: 6vh;
+  margin-top: 3vh;
 }
 
 .email{
@@ -84,7 +96,14 @@ body img{
 
 .botao{
   margin-top: 5vh;
-  
+  position: fixed;
+  transition: 0.3s;
+}
+
+.botao:hover{
+  transform: scale(1.05);
+  transform-origin: center center;
+  transition: 0.3s;
 }
 
 #btn-entrar{
@@ -98,9 +117,9 @@ body img{
 }
 
 .cadastrar{
-  margin-top: 12vh;
-  display: flex;
-  justify-content: end;
+  margin-top: 42%;
+  position: fixed;
+  margin-left: 40vh;
 }
 
 .cadastrar button{
@@ -111,4 +130,15 @@ body img{
   cursor: pointer;
   color: white;
   background: linear-gradient(90deg, #5600D3, #B125E3);
+  transition: 0.3s;
+}
+
+.cadastrar button:hover{
+transform: scale(1.07);
+transition: 0.3s;
+}
+
+.cadastrar button:active{
+  background-color: white;
+  transition: 0.3s;
 }
