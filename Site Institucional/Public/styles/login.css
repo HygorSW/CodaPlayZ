@@ -11,3 +11,98 @@
 html {
   height: 100%;
 }
+
+body{
+  background-image: url(../Elements/Frame\ 7.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: flex;
+  justify-content: space-between;
+  }
+
+body img{
+  width: 680px;
+  height: 630px;
+  margin-left: 30vh;
+  top: 0;
+}
+
+.entrar{
+  width: 100vh;
+  padding: 5px;
+}
+
+.entrar input{
+  width: 400px;
+  height: 35px;
+  border: solid 1px;
+  border-image: linear-gradient(90deg, #5600D3, #B125E3) 1;
+  border-radius: 10px;
+  padding: 5px;
+  background: transparent;
+}
+
+.entrar p {
+  transform: translateY(8px);
+  width: fit-content;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: white;
+  background: #232323;
+  margin-left: 3.5vh;  
+}
+
+.logo{
+  display: flex;
+  justify-content: end;
+}
+
+.logo img{
+  margin: 0px;
+  width: 200px;
+  height: 100px;
+}
+
+.titulo h1{
+  font-size: 64px;
+  background: linear-gradient(90deg, #5600D3, #B125E3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.email{
+  margin-top: 3vh;
+  margin-bottom: 2.5vh;
+}
+
+.botao{
+  margin-top: 5vh;
+  
+}
+
+#btn-entrar{
+  width: 400px;
+  height: 30px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  background: linear-gradient(90deg, #5600D3, #B125E3);
+}
+
+.cadastrar{
+  margin-top: 15vh;
+  display: flex;
+  justify-content: end;
+}
+
+.cadastrar button{
+  width: 200px;
+  height: 30px;
+  border-radius: 10px ;
+  border: none;
+  cursor: pointer;
+  color: white;
+  background: linear-gradient(90deg, #5600D3, #B125E3);
+}
