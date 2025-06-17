@@ -32,6 +32,27 @@
 
     </div>
 
+
+
+
+
+
+    <!-- divs bob IA:
+     
+             <div class="IA" id="div_IA" style="display: none;">
+            <h1><img src="assets/imgs/BobIA.png" alt=""></h1>
+            <h3>Descreva o contexto do post</h3>
+            <textarea id="pergunta" type="text" placeholder="Contexto do post..."></textarea>
+            <button onclick="gerarResposta()">Gerar Descrição</button>
+            <h3 style="color: white;">Descrição Feita pela IA:</h3>
+            <div id="resposta"></div>
+            <div class="botao_copiar">
+                <button onclick="copiarResposta()">
+                    <img src="assets/imgs/botao_copiar.svg" alt="">
+                </button>
+            </div>
+        </div>-->
+
 </body>
 
 </html>
@@ -107,6 +128,7 @@
         window.location.href = `playlist.html`
     }
 
+<<<<<<< HEAD
     function buscarMusicasRecentes() {
         fetch(`/perfilRoute/buscarMusicasRecentes?pkUsuario=${idUsuario}`, {
             method: "GET"
@@ -174,4 +196,55 @@
         })
     }
 
+=======
+
+
+
+
+
+
+    // funções bob IA
+    function copiarResposta() {
+        var respostaDiv = document.getElementById('resposta');
+
+        var texto = respostaDiv.innerText;
+
+        navigator.clipboard.writeText(texto)
+    }
+
+    function sair() {
+
+        sessionStorage.clear()
+        window.location = "../index.html"
+    }
+
+    async function gerarResposta() {
+        const pergunta = document.getElementById('pergunta');
+        const respostaDiv = document.getElementById('resposta');
+        respostaDiv.innerText = '';
+
+        const response = await fetch('/perguntar/pergunta', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ pergunta: pergunta.value })
+        });
+
+        const data = await response.json()
+        const texto = data.resultado;
+
+        resposta.style.display = 'block'
+        var html = ''
+        pergunta.value = ``
+
+        for (var i = 0; i < texto.length; i++) {
+
+            html += texto[i]
+
+            respostaDiv.innerHTML = html;
+            await new Promise(resolve => setTimeout(resolve, 30))
+        }
+    }
+>>>>>>> 1838ad9bebdfd2542081783892c6ece0644ab3b4
 </script>
