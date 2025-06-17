@@ -34,8 +34,7 @@ CREATE TABLE playlist_musica (
         REFERENCES musica (idMusica)
 );
 
-SELECT musica.*
-FROM musica
+SELECT musica.* FROM musica
 JOIN playlist_musica ON musica.idMusica = playlist_musica.fkMusica
 WHERE playlist_musica.fkPlaylist = 1;
 

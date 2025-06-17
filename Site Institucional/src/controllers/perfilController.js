@@ -40,7 +40,27 @@ function buscarPlaylist(req, res) {
         )
 }
 
+function buscarMusicasRecentes(req, res) {
+    var pkUsuario = req.query.idUsuario;
+
+    perfilModel.buscarMusicasRecentes(pkUsuario)
+        .then(
+            function (resultado) {
+                res.json(resultado)
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro)
+                console.log(
+                    "\n Houve um erro ao buscar musicas recentes do usuário! Erro: "
+                );
+                res.status(500).json(erro.sqlMessage)
+            }
+        )
+}
+
 module.exports = {
     cadastrarPlaylist,
-    buscarPlaylist
+    buscarPlaylist,
+    buscarMusicasRecentes
 }

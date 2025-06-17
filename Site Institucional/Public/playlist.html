@@ -7,7 +7,7 @@
     <title>Document</title>
 </head>
 
-<body>
+<body onload="buscarMusica()">
     <input type="text" id="input_nome">
     <button onclick="EditarPlaylist()">editar</button>
 </body>
@@ -73,6 +73,8 @@
             .then(response => response.json())
             .then(dadosMusica => {
                 dadosMusica.forEach(resultado => {
+                    var idMusica = dadosMusica.idMusica
+
                     fetch(`https://api.spotify.com/v1/tracks/${dadosMusica.idSpotify}`, {
                         headers: { 'Authorization': 'Bearer ' + token }
                     })
@@ -95,6 +97,7 @@
                                     <div onclick="tocar('${uri}')">
                                         <img src="${imagem}" width="100"><br>
                                         <p>Nome:</p> ${nome}<br>
+                                        <button onclick="deletarMusica(${idMusica})">Deletar Musica</button>
                                     </div>
                                         `
 
@@ -140,4 +143,44 @@
             }
         })
     }
+
+    function deletarMusica(idMusica) {
+        var musicaDeletar = idMusica
+
+        fetch("/playlistRoute/deletarMusica", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                idPlaylistServer: idPlaylist,
+                idMusicaServer: musicaDeletar
+            })
+        }).then(function (resposta) {
+            console.log("ESTOU NO THEN DO entrar()!")
+
+            if (resposta.ok) {
+                console.log(resposta);
+
+                resposta.json().then(json => {
+                    console.log(json);
+                    console.log(JSON.stringify(json));
+
+                    window.location = "./playlist.html"
+                });
+
+            } else {
+
+                console.log("Houve um erro ao tentar deletar sua musica")
+
+                resposta.text().then(texto => {
+                    console.error(texto);
+                });
+            }
+
+        }).catch(function (erro) {
+            console.log(erro);
+        })
+    }
+
 </script>

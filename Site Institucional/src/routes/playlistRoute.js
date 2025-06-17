@@ -11,4 +11,8 @@ router.put("/editarPlaylist", function (req, res) {
     playlistController.editorPlaylist(req, res)
 })
 
+router.post("/deletarMusica", function (req, res) {
+    playlistController.deletarMusica(req, res)
+})
+
 module.exports = router

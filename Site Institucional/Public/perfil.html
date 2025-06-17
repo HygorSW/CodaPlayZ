@@ -9,7 +9,7 @@
     <link rel="shortcut icon" href="" type="image/x-icon">
 </head>
 
-<body>
+<body onload="buscarPlaylist()">
 
     <div class="entrar">
 
@@ -32,13 +32,29 @@
 
     </div>
 
+
+    <!-- divs bob IA:
+     
+             <div class="IA" id="div_IA" style="display: none;">
+            <h1><img src="assets/imgs/BobIA.png" alt=""></h1>
+            <h3>Descreva o contexto do post</h3>
+            <textarea id="pergunta" type="text" placeholder="Contexto do post..."></textarea>
+            <button onclick="gerarResposta()">Gerar Descrição</button>
+            <h3 style="color: white;">Descrição Feita pela IA:</h3>
+            <div id="resposta"></div>
+            <div class="botao_copiar">
+                <button onclick="copiarResposta()">
+                    <img src="assets/imgs/botao_copiar.svg" alt="">
+                </button>
+            </div>
+        </div>-->
+
 </body>
 
 </html>
 <script>
     var idUsuario = sessionStorage.ID_USUARIO;
-
-
+    var carroselMusicas = []
     function cadastrarPlaylist() {
         var nomePlaylist = input_nome.value;
 
@@ -94,7 +110,7 @@
             .then(playlist => {
                 playlist.forEach(resultado => {
                     div.innerHTML += `
-                    <button onclick="redirectPage('${playlist.idPlaylist}')">
+                    <button onclick="redirecionarPagina('${playlist.idPlaylist}')">
                         <img src="${imagem}"><br>
                         <p>Nome:</p> ${nome}<br>
                     </button>
@@ -103,9 +119,119 @@
             })
     }
 
-    function redirectPage(idCaminhao, placa) {
+    function redirecionarPagina(idCaminhao, placa) {
         sessionStorage.PLAYLIST = idPlaylist
         window.location.href = `playlist.html`
     }
 
+    function buscarMusicasRecentes() {
+        fetch(`/perfilRoute/buscarMusicasRecentes?pkUsuario=${idUsuario}`, {
+            method: "GET"
+        })
+            .then(response => response.json())
+            .then(musicasRecentes => {
+                musicasRecentes.forEach(resultado => {
+
+                    fetch(`https://api.spotify.com/v1/tracks/${musicasRecentes.idSpotify}`, {
+                        headers: { 'Authorization': 'Bearer ' + token }
+                    })
+                        .then(res => res.json())
+                        .then(dados => {
+                            var musicas = dados.tracks.items
+
+                            for (var i = 0; i < musicas.length; i++) {
+                                var musica = musicas[i]
+
+                                var nome = musica.name
+                                var imagem = musica.album.images[0].url
+                                var uri = musica.uri
+                                var artista = musica.artists
+
+                                carrosel.push(`<div onclick="tocar('${uri}')">
+                                                <img src="${imagem}" width="100"><br>
+                                                <p>Nome:</p> ${nome}<br>
+                                              </div>`)
+                            }
+                        })
+                        .catch(function (erro) {
+                            console.log(erro)
+                            resultado.innerHTML = "<p>Erro na busca.</p>"
+                        })
+                })
+            })
+    }
+
+    window.onSpotifyWebPlaybackSDKReady = () => {
+        var player = new Spotify.Player({
+            name: 'Player Web',
+            getOAuthToken: cb => cb(token)
+        })
+
+        player.addListener('ready', e => {
+            deviceId = e.device_id
+            console.log('Player pronto:', deviceId)
+        })
+
+        player.connect()
+    }
+
+    function tocar(uri) {
+        if (!deviceId) {
+            alert('Player não está pronto. Aguarde...')
+            return
+        }
+
+        fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+            method: 'PUT',
+            body: JSON.stringify({ uris: [uri] }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        })
+    }
+
+    // funções bob IA
+    function copiarResposta() {
+        var respostaDiv = document.getElementById('resposta');
+
+        var texto = respostaDiv.innerText;
+
+        navigator.clipboard.writeText(texto)
+    }
+
+    function sair() {
+
+        sessionStorage.clear()
+        window.location = "../index.html"
+    }
+
+    async function gerarResposta() {
+        const pergunta = document.getElementById('pergunta');
+        const respostaDiv = document.getElementById('resposta');
+        respostaDiv.innerText = '';
+
+        const response = await fetch('/perguntar/pergunta', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ pergunta: pergunta.value })
+        });
+
+        const data = await response.json()
+        const texto = data.resultado;
+
+        resposta.style.display = 'block'
+        var html = ''
+        pergunta.value = ``
+
+        for (var i = 0; i < texto.length; i++) {
+
+            html += texto[i]
+
+            respostaDiv.innerHTML = html;
+            await new Promise(resolve => setTimeout(resolve, 30))
+        }
+    }
 </script>
