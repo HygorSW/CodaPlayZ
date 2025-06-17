@@ -38,6 +38,7 @@
 <script>
     var idUsuario = sessionStorage.ID_USUARIO;
 
+
     function cadastrarPlaylist() {
         var nomePlaylist = input_nome.value;
 
@@ -50,7 +51,7 @@
         } else if (idUsuario == undefined) {
             div_mensagem.innerHTML = `É necessário estar logado para criar uma playlist`
         } else {
-            fetch("/usuarioRoute/autenticar", {
+            fetch("/perfilRoute/cadastrarPlaylist", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

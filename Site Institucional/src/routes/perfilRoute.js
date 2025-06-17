@@ -7,7 +7,8 @@ router.post("/cadastrarPlaylist", function (req, res) {
     perfilController.cadastrarPlaylist(req, res)
 })
 
-router.get("/buscarPlaylist", function(req, res) {
+
+router.get("/buscarPlaylist", function (req, res) {
     perfilController.buscarPlaylist(req, res)
 })
 

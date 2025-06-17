@@ -7,6 +7,13 @@ function buscarMusica(idPlaylist) {
     return database.executar(instrucaoSql);
 }
 
+function editarPlaylist(idPlaylist, nomePlaylist) {
+    var instrucaoSql = `
+        update playlist set nome = '${nomePlaylist}' where idPlaylist = ${idPlaylist};`;
+    console.log("Executando a instrução SQL: Consulta de resultados \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 module.exports = {
-    buscarMusica
+    buscarMusica, editarPlaylist
 }

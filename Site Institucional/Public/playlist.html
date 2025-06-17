@@ -8,13 +8,63 @@
 </head>
 
 <body>
-
+    <input type="text" id="input_nome">
+    <button onclick="EditarPlaylist()">editar</button>
 </body>
 
 </html>
 <script>
     var token = ''
-    var idPlaylist = sessionStorage.PLAYLIST
+    var idPlaylist = 1
+
+
+    function EditarPlaylist() {
+        var nomePlaylist = input_nome.value;
+
+        if (nomePlaylist == ``) {
+            div_mensagem.innerHTML = `Preencha todos os campos`
+        } else if (nomePlaylist.length > 30) {
+            div_mensagem.innerHTML = `O nomePlaylist pode ter no maximo 30 letras`
+        } else if (nomePlaylist.length < 3) {
+            div_mensagem.innerHTML = `A senha deve conter pelo menos 3 caracteres`
+        } else if (idPlaylist == undefined) {
+            div_mensagem.innerHTML = `É necessário estar logado para criar uma playlist`
+        } else {
+            fetch("/playlistRoute/editarPlaylist", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    playlistServer: idPlaylist,
+                    nomePlaylistServer: nomePlaylist
+                })
+            }).then(function (resposta) {
+                console.log("ESTOU NO THEN DO entrar()!")
+
+                if (resposta.ok) {
+                    console.log(resposta);
+
+                    resposta.json().then(json => {
+                        console.log(json);
+                        console.log(JSON.stringify(json));
+                        alert(`Alteração de playlist - sucesso`)
+                        window.location = "./playlist.html"
+                    });
+
+                } else {
+                    console.log("Houve um erro ao tentar realizar o edição!")
+                    resposta.text().then(texto => {
+                        console.error(texto);
+                    });
+                }
+
+            }).catch(function (erro) {
+                console.log(erro);
+            })
+        }
+    }
+
 
     function buscarMusica() {
         fetch(`/musicaRoute/buscarMusica?idPlaylist=${idPlaylist}`, {
