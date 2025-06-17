@@ -42,15 +42,15 @@
         var nomePlaylist = input_nome.value;
 
         if (nomePlaylist == ``) {
-            div_mensagem = `Preencha todos os campos`
+            div_mensagem.innerHTML = `Preencha todos os campos`
         } else if (nomePlaylist.length > 30) {
-            div_mensagem = `O nomePlaylist pode ter no maximo 30 letras`
-        } else if (nomePlaylist.length < 8) {
-            div_mensagem = `A senha deve conter pelo menos 8 caracteres`
-        } else if (idUsuario == '') {
-            div_mensagem = `É necessário estar logado para criar uma playlist`
+            div_mensagem.innerHTML = `O nomePlaylist pode ter no maximo 30 letras`
+        } else if (nomePlaylist.length < 3) {
+            div_mensagem.innerHTML = `A senha deve conter pelo menos 3 caracteres`
+        } else if (idUsuario == undefined) {
+            div_mensagem.innerHTML = `É necessário estar logado para criar uma playlist`
         } else {
-            fetch('/perfilRoute/cadastrarPlaylist', {
+            fetch("/usuarioRoute/autenticar", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -60,12 +60,27 @@
                     nomePlaylistServer: nomePlaylist
                 })
             }).then(function (resposta) {
-                console.log(resposta);
-                div_mensagem.innerHTML = `Cadastro realizado`
-                alert(`Cadastro realizado`)
+                console.log("ESTOU NO THEN DO entrar()!")
+
+                if (resposta.ok) {
+                    console.log(resposta);
+
+                    resposta.json().then(json => {
+                        console.log(json);
+                        console.log(JSON.stringify(json));
+                        alert(`Cadastro de playlist - sucrsso`)
+                        window.location = "./playlist.html"
+                    });
+
+                } else {
+                    console.log("Houve um erro ao tentar realizar o login!")
+                    resposta.text().then(texto => {
+                        console.error(texto);
+                    });
+                }
+
             }).catch(function (erro) {
                 console.log(erro);
-                div_mensagem.innerHTML = `É necessário estar logado para criar uma playlist`
             })
         }
     }

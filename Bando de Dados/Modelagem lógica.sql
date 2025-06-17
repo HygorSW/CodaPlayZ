@@ -18,21 +18,9 @@ CREATE TABLE playlist (
         REFERENCES usuario (idUsuario)
 );
 
-CREATE TABLE artista (
-    idArtista INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(100),
-    idSpotify VARCHAR(300)
-);
-
-
 CREATE TABLE musica (
-    idMusica INT AUTO_INCREMENT,
-    fkArtista INT,
-    PRIMARY KEY (idMusica , fkArtista),
-    titulo VARCHAR(300) NOT NULL,
-    idSpotify VARCHAR(300) UNIQUE,
-    CONSTRAINT artistaMusica FOREIGN KEY (fkArtista)
-        REFERENCES artista (idArtista)
+    idMusica INT PRIMARY KEY AUTO_INCREMENT,
+    idSpotify VARCHAR(300) UNIQUE
 );
 
 CREATE TABLE playlist_musica (
@@ -45,3 +33,10 @@ CREATE TABLE playlist_musica (
     CONSTRAINT musicaAssociativa FOREIGN KEY (fkMusica)
         REFERENCES musica (idMusica)
 );
+
+SELECT musica.*
+FROM musica
+JOIN playlist_musica ON musica.idMusica = playlist_musica.fkMusica
+WHERE playlist_musica.fkPlaylist = 1;
+
+SELECT * FROM playlist;
