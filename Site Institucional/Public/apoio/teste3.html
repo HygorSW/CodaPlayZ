@@ -64,6 +64,10 @@
                     `
                     }
                 })
+                .catch(function (erro) {
+                    console.log(erro)
+                    resultado.innerHTML = "<p>Erro na busca.</p>"
+                })
         }
 
         function tocar(uri) {
