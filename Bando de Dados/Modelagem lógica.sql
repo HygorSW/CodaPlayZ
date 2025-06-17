@@ -20,7 +20,7 @@ CREATE TABLE playlist (
 
 CREATE TABLE musica (
     idMusica INT PRIMARY KEY AUTO_INCREMENT,
-    idSpotify VARCHAR(300) UNIQUE
+    idSpotify VARCHAR(300)
 );
 
 CREATE TABLE playlist_musica (
@@ -40,3 +40,5 @@ JOIN playlist_musica ON musica.idMusica = playlist_musica.fkMusica
 WHERE playlist_musica.fkPlaylist = 1;
 
 SELECT * FROM playlist;
+
+DELETE FROM playlist_musica WHERE fkPlaylist = 1 AND fkMusica = 1;
