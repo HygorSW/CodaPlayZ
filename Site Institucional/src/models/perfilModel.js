@@ -16,7 +16,15 @@ function buscarPlaylist(pkUsuario) {
     return database.executar(instrucaoSql);
 }
 
+function buscarMusicasRecentes(pkUsuario) {
+    var instrucaoSql = `
+        `;
+    console.log("Executando a instrução SQL: Consulta de resultados \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 module.exports = {
     cadastrarPlaylist,
-    buscarPlaylist
+    buscarPlaylist,
+    buscarMusicasRecentes
 }
