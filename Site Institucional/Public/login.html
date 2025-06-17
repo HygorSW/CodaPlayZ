@@ -10,9 +10,9 @@
 </head>
 
 <body>
-<img src="./assets/icons/ChatGPT Image 17 de jun. de 2025, 11_55_11.png" alt="">
-    
-<div class="entrar">
+    <img src="./assets/icons/ChatGPT Image 17 de jun. de 2025, 11_55_11.png" alt="">
+
+    <div class="entrar">
         <div class="logo">
             <img src="./assets/imgs/WhatsApp_Image_2025-06-02_at_18.58.59-removebg-preview.png" alt="">
         </div>
@@ -47,17 +47,12 @@
         var senha = input_senha.value
 
         if (email == `` || senha == ``) {
-            alert(`Preencha todos os campos`)
-            div_mensagem = `Preencha todos os campos`
-        }
-        else if (!email.includes('@') || !email.includes('.')) {
-            alert('O email deve conter @ e .')
-            div_mensagem = `O email deve conter @ e .`
+            div_mensagem.innerHTML = `Preencha todos os campos`
+        } else if (!email.includes('@') || !email.includes('.')) {
+            div_mensagem.innerHTML = `O email deve conter @ e .`
         } else if (email.indexOf('@') === 0 || email.lastIndexOf('.') === email.length - 1) {
-            alert('Email inválido: @ não pode ser o primeiro caractere e . não pode ser o último')
             div_mensagem = `Email inválido: @ não pode ser o primeiro caractere e . não pode ser o último`
         } else if (senha.length < 8) {
-            alert('A senha deve conter pelo menos 8 caracteres')
             div_mensagem = `A senha deve conter pelo menos 8 caracteres`
         } else {
 
@@ -83,7 +78,7 @@
                         sessionStorage.NOME_USUARIO = json.nome;
                         sessionStorage.ID_USUARIO = json.idUsuario;
 
-                        alert(`Login bem sucedido`)
+                        div_mensagem.innerHTML = `Login bem sucedido`
                         window.location = "./playlist.html"
                     });
 

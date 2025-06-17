@@ -60,22 +60,17 @@
     var confSenha = input_confSenha.value
 
     if (nome == `` || email == `` || senha == `` || confSenha == ``) {
-      alert(`Preencha todos os campos`)
-      div_mensagem = `Preencha todos os campos`
+      div_mensagem.innerHTML = `Preencha todos os campos`
     } else if (nome.length > 12) {
-      alert(`O nome pode ter no maximo 12 letras`)
+      div_mensagem.innerHTML = `O nome deve `
     } else if (!email.includes('@') || !email.includes('.')) {
-      alert('O email deve conter @ e .')
-      div_mensagem = `O email deve conter @ e .`
+      div_mensagem.innerHTML = `O email deve conter @ e .`
     } else if (email.indexOf('@') === 0 || email.lastIndexOf('.') === email.length - 1) {
-      alert('Email inválido: @ não pode ser o primeiro caractere e . não pode ser o último')
-      div_mensagem = `Email inválido: @ não pode ser o primeiro caractere e . não pode ser o último`
+      div_mensagem.innerHTML = `Email inválido: @ não pode ser o primeiro caractere e . não pode ser o último`
     } else if (senha.length < 8) {
-      alert('A senha deve conter pelo menos 8 caracteres')
-      div_mensagem = `A senha deve conter pelo menos 8 caracteres`
+      div_mensagem.innerHTML = `A senha deve conter pelo menos 8 caracteres`
     } else if (senha !== confSenha) {
-      alert('Senha e confirmar senha precisam ser iguais')
-      div_mensagem = `Senha e confirmar senha precisam ser iguais`
+      div_mensagem.innerHTML = `Senha e confirmar senha precisam ser iguais`
     } else {
 
       fetch('/usuarioRoute/cadastrar', {
@@ -89,7 +84,7 @@
           senhaServer: senha
         })
       })
-      alert(`Cadastro realizado`)
+      div_mensagem.innerHTML = `Cadastro bem sucedido`
       setTimeout(() => {
         window.location.href = "login.html"
       }, 1000);
