@@ -16,6 +16,7 @@ var HOST_APP = process.env.APP_HOST;
 var app = express();
 
 var playlistRouter = require("./src/routes/playlistRoute");
+var perfilRouter = require("./src/routes/perfilRoute");
 var usuarioRouter = require("./src/routes/usuarioRoute");
 var spotifyRouter = require("./src/routes/spotifyRoute");
 
@@ -26,6 +27,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 
 app.use("/playlistRoute", playlistRouter);
+app.use("/perfilRoute", perfilRouter);
 app.use("/usuarioRoute", usuarioRouter);
 app.use("/spotify", spotifyRouter);
 

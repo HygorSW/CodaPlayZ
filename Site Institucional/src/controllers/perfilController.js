@@ -4,7 +4,7 @@ function cadastrarPlaylist(req, res) {
     var idUsuario = req.body.usuarioServer
     var nomePlaylist = req.body.nomePlaylistServer
 
-    perfilModel.cadastrarPlaylist(nomePlaylist, idUsuario)
+    perfilModel.cadastrarPlaylist(idUsuario, nomePlaylist)
 
         .then(
             function (resultado) {

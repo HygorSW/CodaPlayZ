@@ -25,7 +25,7 @@
             </div>
 
             <div id="div_mensagem"></div>
-            <button onclick="cadastrar()">cadastrar</button>
+            <button onclick="cadastrarPlaylist()">Criar Playlist</button>
         </div>
     </div>
     <div>
@@ -47,6 +47,8 @@
             div_mensagem = `O nomePlaylist pode ter no maximo 30 letras`
         } else if (nomePlaylist.length < 8) {
             div_mensagem = `A senha deve conter pelo menos 8 caracteres`
+        } else if (idUsuario == '') {
+            div_mensagem = `É necessário estar logado para criar uma playlist`
         } else {
             fetch('/perfilRoute/cadastrarPlaylist', {
                 method: "POST",
@@ -54,11 +56,17 @@
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    nomePlaylistServer: nomePlaylist,
-                    usuarioServer: idUsuario
+                    usuarioServer: idUsuario,
+                    nomePlaylistServer: nomePlaylist
                 })
+            }).then(function (resposta) {
+                console.log(resposta);
+                div_mensagem.innerHTML = `Cadastro realizado`
+                alert(`Cadastro realizado`)
+            }).catch(function (erro) {
+                console.log(erro);
+                div_mensagem.innerHTML = `É necessário estar logado para criar uma playlist`
             })
-            alert(`Cadastro de playlist realizado com sucesso!`)
         }
     }
 
