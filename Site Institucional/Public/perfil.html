@@ -28,6 +28,7 @@
             <button onclick="cadastrarPlaylist()">Criar Playlist</button>
         </div>
     </div>
+    <div id="div"></div>
     <div>
 
     </div>
@@ -109,11 +110,11 @@
         })
             .then(response => response.json())
             .then(playlist => {
+                console.log(playlist)
                 playlist.forEach(resultado => {
                     div.innerHTML += `
                     <button onclick="redirecionarPagina('${playlist.idPlaylist}')">
-                        <img src="${imagem}"><br>
-                        <p>Nome:</p> ${nome}<br>
+                        <p>Nome:</p> ${playlist.nome}<br>
                     </button>
                     `
                 })
