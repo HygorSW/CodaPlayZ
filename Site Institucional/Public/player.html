@@ -121,6 +121,8 @@
 
     const token = getTokenFromUrl();
 
+    sessionStorage.TOKEN = token
+
     if (!token) {
       document.getElementById('track-info').textContent = 'Token não encontrado. Por favor, faça login novamente.';
     } else {
