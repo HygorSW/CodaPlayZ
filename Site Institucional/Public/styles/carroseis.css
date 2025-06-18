@@ -25,6 +25,108 @@ body{
     border-radius: 10px;
     height: 96%;
 }
+.div_esquerda_perfil .musicasProximo{
+    margin-top: 15px;
+    margin-left: 15px;
+    margin-right: 10px;
+    height: 95%;
+    max-height: 675px;
+        overflow-y: scroll; 
+    scrollbar-color: #888 transparent; /* Cor da linha e fundo para Firefox */
+}
+
+/* Para Chrome, Edge e Safari */
+.div_esquerda_perfil .musicasProximo::-webkit-scrollbar {
+    width: 2px; /* Apenas uma linha fininha */
+}
+
+.div_esquerda_perfil .musicasProximo::-webkit-scrollbar-thumb {
+    background-color: #888; /* Cor da linha de rolagem */
+    border-radius: 10px;
+}
+
+.div_esquerda_perfil .musicasProximo::-webkit-scrollbar-track {
+    background: transparent; /* Fundo transparente */
+}
+
+
+.div_esquerda_perfil .musicasProximo .cardM{
+    margin-top: 20px;
+    width: 100%;
+    height: 100px;
+    background-color: #00000099;
+    position: relative;
+    border-radius: 10px;
+
+}
+
+.div_esquerda_perfil .musicasProximo .cardM img{
+    width: 87px;
+    height: 87px;
+    margin-top: 6px;
+    margin-left: 6px;
+    border-radius: 10px;
+    background-color: #00000099;
+    position: relative;
+}
+
+
+.div_esquerda_perfil .musicasProximo .cardM .imgCardP{
+    width: 87px;
+    height: 87px;
+    margin-top: 6px;
+    margin-left: 6px;
+    border-radius: 10px;
+    background-color: #00000099;
+    position: relative;
+}
+.div_esquerda_perfil .musicasProximo .cardM .tituloMusical{
+    position: absolute;
+    left: 110px;
+    font-size: 1.3rem;
+    font-family: 'Protest Strike';
+    font-weight: 500;
+    top: 10px;
+    color: #fff;
+}
+
+.div_esquerda_perfil .musicasProximo .cardM .desc{
+        position: absolute;
+    left: 110px;
+    font-size: 1rem;
+    font-weight: 500;
+    top: 50px;
+    color: #a1a1a1;
+}
+
+
+.div_esquerda_perfil .musicasProximo .cardM .salvar{
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top:5px;
+    background-image: url("../assets/imgs/playlistPage/favoritar0.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 25px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    right: 5px;
+}
+
+.div_esquerda_perfil .musicasProximo .cardM .tempo{
+    color: #fff;
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+}
+
+
+
+
+
+
 .div_direita_perfil{
     display: flex;
     justify-content: center;
@@ -54,7 +156,6 @@ body{
     justify-content: center;
     
 }
-
 
 .div_carrosel_perfil .right{
     margin-top: 70px;
