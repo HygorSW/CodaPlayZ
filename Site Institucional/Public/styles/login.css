@@ -95,7 +95,7 @@ body img{
 }
 
 .botao{
-  margin-top: 5vh;
+  margin-top: 2vh;
   position: fixed;
   transition: 0.3s;
 }
@@ -118,9 +118,10 @@ body img{
 }
 
 .cadastrar{
+
   margin-top: 42%;
   position: fixed;
-  margin-left: 20%;
+  margin-left: 22%;
 }
 
 .cadastrar button{
@@ -143,4 +144,19 @@ transition: 0.3s;
 .cadastrar button:active{
   background-color: white;
   transition: 0.3s;
+}
+
+#div_mensagem{
+  margin-top: 1.5vh;
+  padding-left:5px;
+}
+
+#div_mensagem p{
+  color: white;
+  font-size: 16px;
+  transform: translateY(0px);
+  padding: 0px;
+  color: white;
+  background: #1A1A1A;
+  margin: 0;
 }
