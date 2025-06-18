@@ -8,7 +8,6 @@
 </head>
 
 <body>
-
 </body>
 
 </html>
@@ -60,7 +59,7 @@
                             <b>${nome}</b><br>
                             <b>${artista}</b><br>
                             <button onclick="tocar('${uri}')">Tocar</button>
-                            <button onclick="abrirPlaylist()">+</button>
+                            <button onclick="abrirPlaylist(${idSpotify})">+</button>
                         </div>
                     `
                 })
@@ -85,22 +84,95 @@
                 'Authorization': 'Bearer ' + token
             }
         })
+
+        fetch("/pesquisarRoute/adicionarMusicaRecente", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                idUsuarioServer: idUsuario,
+                idSpotifyServer: idSpotify
+            })
+        }).then(function (resposta) {
+            console.log("ESTOU NO THEN DO entrar()!")
+
+            if (resposta.ok) {
+                console.log(resposta);
+
+                resposta.json().then(json => {
+                    console.log(json);
+                    console.log(JSON.stringify(json));
+                });
+
+            } else {
+
+                console.log("Houve um erro ao tentar add sua musica")
+
+                resposta.text().then(texto => {
+                    console.error(texto);
+                });
+            }
+
+        }).catch(function (erro) {
+            console.log(erro);
+        })
     }
 
-    function abrirPlaylist() {
+    function abrirPlaylist(idSpotify) {
         fetch(`/perfilRoute/buscarPlaylist?pkUsuario=${idUsuario}`, {
             method: "GET"
         })
             .then(response => response.json())
             .then(playlist => {
                 playlist.forEach(resultado => {
+                    var idPlaylis = resultado.idPlaylis
+
                     div.innerHTML += `
-                <div class="containerTitulo">
-                    <div id="tituloCard"><h1>${resultado.nome}</h1></div>
+                <div>
+                    <div><h1>${resultado.nome}</h1></div>
+                    <div>
+                        <button onclick="adicionarMusica(${idSpotify}, ${idPlaylis})"></button>
+                    </div>
                 </div>
                     `
                 })
             })
+    }
+
+    function adicionarMusica(idSpotify, idPlaylist) {
+        fetch("/pesquisarRoute/adicionarMusica", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                idSpotifyServer: idSpotify,
+                idPlaylistServer: idPlaylist
+            })
+        }).then(function (resposta) {
+            console.log("ESTOU NO THEN DO entrar()!")
+
+            if (resposta.ok) {
+                console.log(resposta);
+
+                resposta.json().then(json => {
+                    console.log(json);
+                    console.log(JSON.stringify(json));
+                });
+
+            } else {
+
+                console.log("Houve um erro ao tentar add sua musica")
+
+                resposta.text().then(texto => {
+                    console.error(texto);
+                });
+            }
+
+        }).catch(function (erro) {
+            console.log(erro);
+        })
     }
 
 </script>
