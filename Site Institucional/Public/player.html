@@ -2,160 +2,103 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Spotify Web Player com Autoplay</title>
+  <title>Spotify Web Player</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #121212;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-    }
-    #player {
-      background: #1db954;
-      padding: 20px;
-      border-radius: 10px;
-      width: 300px;
-      text-align: center;
-    }
-    button {
-      background: #191414;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      margin: 5px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    button:hover {
-      background: #1ed760;
-      color: black;
-    }
-    #track-info {
-      margin: 15px 0;
-    }
+    body { font-family: Arial, sans-serif; background: #121212; color: white; text-align:center; padding: 20px; }
+    #track-info { margin: 20px; }
+    button { margin: 5px; padding: 10px 15px; font-size: 16px; cursor: pointer; }
   </style>
 </head>
 <body>
 
-  <div id="player">
-    <h2>Spotify Player</h2>
-    <div id="track-info">Carregando...</div>
-    <button id="prev">⏮️ Anterior</button>
-    <button id="play">▶️ Tocar</button>
-    <button id="pause" style="display:none;">⏸️ Pausar</button>
-    <button id="next">⏭️ Próximo</button>
-  </div>
+  <h1>Spotify Web Player</h1>
+  <div id="track-info">Carregando...</div>
+  <button id="prev">⏮️ Anterior</button>
+  <button id="play">▶️ Tocar</button>
+  <button id="pause" style="display:none;">⏸️ Pausar</button>
+  <button id="next">⏭️ Próximo</button>
 
-  <script src="https://sdk.scdn.co/spotify-player.js"></script>
   <script>
-    // Seu token de acesso válido com escopos corretos (streaming, user-read-playback-state, etc)
-    const token = 'BQBHvchYRU5QXhphb38j-wK8HCrxWiKFcJA5ushj3x_P3SAKCs1eu2fgFgg3DkMI7winaP4vCvbEs40KsoQCPLx7VIk6GWis3b-4_4UpvahS-Ub-kmJ61v-l9o-gzDl6t20g6K_9EZg';
+    // Função para pegar o token do hash da URL
+    function getTokenFromUrl() {
+      const hash = window.location.hash.substring(1);
+      const params = new URLSearchParams(hash);
+      return params.get('access_token');
+    }
 
-    // URIs das músicas que quer tocar (pode colocar 1 ou várias)
-    const tracksToPlay = [
-      'spotify:track:5yzO9eaFRySY6G6RjtUFZY',
-      'spotify:track:5KXXi90Q4pjVxEapZjRC9O'
-    ];
+    const token = getTokenFromUrl();
 
-    window.onSpotifyWebPlaybackSDKReady = () => {
-      const player = new Spotify.Player({
-        name: 'Meu Web Player',
-        getOAuthToken: cb => { cb(token); },
-        volume: 0.5
-      });
-
-      player.addListener('initialization_error', ({ message }) => { console.error(message); });
-      player.addListener('authentication_error', ({ message }) => { console.error('Erro autenticação:', message); });
-      player.addListener('account_error', ({ message }) => { console.error('Erro conta:', message); });
-      player.addListener('playback_error', ({ message }) => { console.error('Erro playback:', message); });
-
-      player.addListener('player_state_changed', state => {
-        if (!state) {
-          document.getElementById('track-info').textContent = 'Nenhuma música tocando';
-          return;
-        }
-        const currentTrack = state.track_window.current_track;
-        document.getElementById('track-info').textContent = `${currentTrack.name} — ${currentTrack.artists.map(artist => artist.name).join(', ')}`;
-        if (state.paused) {
-          document.getElementById('play').style.display = 'inline-block';
-          document.getElementById('pause').style.display = 'none';
-        } else {
-          document.getElementById('play').style.display = 'none';
-          document.getElementById('pause').style.display = 'inline-block';
-        }
-      });
-
-      player.addListener('ready', ({ device_id }) => {
-        console.log('Pronto com Device ID', device_id);
-        window.device_id = device_id;
-        transferPlaybackHere(device_id).then(() => {
-          playTracks(device_id, tracksToPlay);
+    if (!token) {
+      document.getElementById('track-info').textContent = 'Token não encontrado. Por favor, faça login novamente.';
+    } else {
+      // Define a função global que o SDK chama quando estiver pronto
+      window.onSpotifyWebPlaybackSDKReady = () => {
+        const player = new Spotify.Player({
+          name: 'Meu Web Player',
+          getOAuthToken: cb => { cb(token); },
+          volume: 0.5
         });
-      });
 
-      player.addListener('not_ready', ({ device_id }) => {
-        console.log('Dispositivo saiu do ar', device_id);
-      });
-
-      player.connect();
-
-      // Transferir playback para o Web Player
-      async function transferPlaybackHere(device_id) {
-        return fetch('https://api.spotify.com/v1/me/player', {
-          method: 'PUT',
-          body: JSON.stringify({
-            "device_ids": [device_id],
-            "play": false
-          }),
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
+        player.addListener('initialization_error', ({ message }) => { console.error('Erro na inicialização:', message); });
+        player.addListener('authentication_error', ({ message }) => {
+          console.error('Erro de autenticação:', message);
+          document.getElementById('track-info').textContent = 'Erro de autenticação, faça login novamente.';
         });
-      }
+        player.addListener('account_error', ({ message }) => { console.error('Erro conta:', message); });
+        player.addListener('playback_error', ({ message }) => { console.error('Erro playback:', message); });
 
-      // Iniciar a reprodução das faixas
-      async function playTracks(device_id, uris) {
-        try {
-          const response = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${device_id}`, {
+        player.addListener('player_state_changed', state => {
+          if (!state) {
+            document.getElementById('track-info').textContent = 'Nenhuma música tocando';
+            return;
+          }
+          const currentTrack = state.track_window.current_track;
+          document.getElementById('track-info').textContent = `${currentTrack.name} — ${currentTrack.artists.map(a => a.name).join(', ')}`;
+          if (state.paused) {
+            document.getElementById('play').style.display = 'inline-block';
+            document.getElementById('pause').style.display = 'none';
+          } else {
+            document.getElementById('play').style.display = 'none';
+            document.getElementById('pause').style.display = 'inline-block';
+          }
+        });
+
+        player.addListener('ready', ({ device_id }) => {
+          console.log('Pronto com device ID', device_id);
+          // Transfere o playback para o Web Playback SDK
+          fetch('https://api.spotify.com/v1/me/player', {
             method: 'PUT',
-            body: JSON.stringify({ uris }),
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`
             },
-          });
-          if (response.status === 204) {
-            console.log('Playback iniciado!');
-          } else {
-            const errorData = await response.json();
-            console.error('Erro ao iniciar playback:', errorData);
-          }
-        } catch (error) {
-          console.error('Erro na requisição de playback:', error);
-        }
-      }
+            body: JSON.stringify({
+              device_ids: [device_id],
+              play: false
+            }),
+          }).then(() => {
+            console.log('Playback transferido para o player da web');
+          }).catch(console.error);
+        });
 
-      // Controles dos botões
-      document.getElementById('play').onclick = () => {
-        player.resume().catch(console.error);
+        player.addListener('not_ready', ({ device_id }) => {
+          console.log('Player ficou offline', device_id);
+        });
+
+        player.connect();
+
+        // Botões de controle
+        document.getElementById('play').onclick = () => player.resume().catch(console.error);
+        document.getElementById('pause').onclick = () => player.pause().catch(console.error);
+        document.getElementById('next').onclick = () => player.nextTrack().catch(console.error);
+        document.getElementById('prev').onclick = () => player.previousTrack().catch(console.error);
       };
-      document.getElementById('pause').onclick = () => {
-        player.pause().catch(console.error);
-      };
-      document.getElementById('next').onclick = () => {
-        player.nextTrack().catch(console.error);
-      };
-      document.getElementById('prev').onclick = () => {
-        player.previousTrack().catch(console.error);
-      };
-    };
+
+      // Carrega o SDK do Spotify
+      const script = document.createElement('script');
+      script.src = "https://sdk.scdn.co/spotify-player.js";
+      document.body.appendChild(script);
+    }
   </script>
 
 </body>
