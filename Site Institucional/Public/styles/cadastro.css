@@ -13,7 +13,7 @@ html {
 }
 
 body{
-  background-image: url();
+  background-image: url(../assets/icons/background-light.png);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -62,7 +62,7 @@ body img{
   padding-left: 5px;
   padding-right: 5px;
   color: #0D0D0D;
-  background: white;
+  background: #E6E6E7;
   margin-left: 3vh;  
 }
 
