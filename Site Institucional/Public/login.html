@@ -47,13 +47,13 @@
         var senha = input_senha.value
 
         if (email == `` || senha == ``) {
-            div_mensagem.innerHTML = `Preencha todos os campos`
+            div_mensagem.innerHTML = `<p> Preencha todos os campos </p>`
         } else if (!email.includes('@') || !email.includes('.')) {
-            div_mensagem.innerHTML = `O email deve conter @ e .`
+            div_mensagem.innerHTML = `<p> O email deve conter @ e . </p>`
         } else if (email.indexOf('@') === 0 || email.lastIndexOf('.') === email.length - 1) {
-            div_mensagem = `Email inválido: @ não pode ser o primeiro caractere e . não pode ser o último`
+            div_mensagem.innerHTML = `<p> Email inválido: @ não pode ser o primeiro caractere e . não pode ser o último </p>`
         } else if (senha.length < 8) {
-            div_mensagem = `A senha deve conter pelo menos 8 caracteres`
+            div_mensagem.innerHTML = `<p> A senha deve conter pelo menos 8 caracteres </p>`
         } else {
 
             fetch("/usuarioRoute/autenticar", {
