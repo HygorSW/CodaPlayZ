@@ -33,7 +33,7 @@ body img{
   padding: 5px;
   display: flex;
   flex-direction: column;
-  padding-left: 5vh;
+  padding-left: 1vh;
 }
 
 .entrar input{
@@ -107,8 +107,9 @@ body img{
 }
 
 #btn-entrar{
-  width: 400px;
+  width: 63.5vh;
   height: 30px;
+  font-size: 18px;
   border-radius: 10px;
   border: none;
   cursor: pointer;
@@ -119,18 +120,19 @@ body img{
 .cadastrar{
   margin-top: 42%;
   position: fixed;
-  margin-left: 40vh;
+  margin-left: 20%;
 }
 
 .cadastrar button{
-  width: 200px;
-  height: 30px;
+  width: 30vh;
+  height: 5vh;
   border-radius: 10px ;
   border: none;
   cursor: pointer;
   color: white;
   background: linear-gradient(90deg, #5600D3, #B125E3);
   transition: 0.3s;
+  font-size: 18px;
 }
 
 .cadastrar button:hover{
