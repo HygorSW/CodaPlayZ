@@ -212,6 +212,8 @@
   }
 
   function buscarMusicasRecentes() {
+    musicasRecentesDiv.innerHTML = ''
+
     fetch(`/perfilRoute/buscarMusicasRecentes?pkUsuario=${idUsuario}`, {
       method: "GET"
     })
@@ -225,7 +227,6 @@
           })
             .then(res => res.json())
             .then(dados => {
-              musicasRecentesDiv.innerHTML = ''
               var musicas = dados.tracks.items
 
               if (dados.length >= 1) {
