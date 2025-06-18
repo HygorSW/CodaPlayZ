@@ -1,6 +1,6 @@
 
-const clientId = '864869bc18a44add9a5269d78fc8c4d7';
-const clientSecret = '5337f5077a464628aba070ec057b58c8';
+const clientId = process.env.CLIENT_ID;
+const clientSecret = process.env.CLIENT_SECRET;
 
 async function pegarToken(req, res) {
   const authString = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
@@ -27,6 +27,4 @@ async function pegarToken(req, res) {
   }
 }
 
-module.exports = {
-  pegarToken
-};
+module.exports = { pegarToken };
