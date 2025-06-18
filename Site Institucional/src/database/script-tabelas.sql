@@ -20,6 +20,7 @@ CREATE TABLE playlist (
     idPlaylist INT PRIMARY KEY AUTO_INCREMENT,
     pkUsuario INT NOT NULL,
     nome VARCHAR(300) NOT NULL,
+    descriacao TEXT,
     imagem_playlist TEXT,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT usuarioPlaylist FOREIGN KEY (pkUsuario)
@@ -27,19 +28,11 @@ CREATE TABLE playlist (
 );
 
 CREATE TABLE musica (
-    idMusica INT PRIMARY KEY AUTO_INCREMENT,
-    idSpotify VARCHAR(300)
-);
-
-CREATE TABLE playlist_musica (
-    fkPlaylist INT NOT NULL,
-    fkMusica INT NOT NULL,
-    data_adicao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (fkPlaylist , fkMusica),
-    CONSTRAINT playlisAssociativa FOREIGN KEY (fkPlaylist)
-        REFERENCES playlist (idPlaylist),
-    CONSTRAINT musicaAssociativa FOREIGN KEY (fkMusica)
-        REFERENCES musica (idMusica)
+    idMusica INT AUTO_INCREMENT,
+    idSpotify VARCHAR(300),
+    pkPlaylist INT,
+    PRIMARY KEY (idMusica, pkPlaylist),
+    CONSTRAINT playlistMusica FOREIGN KEY (pkPlaylist) REFERENCES playlist (idPlaylist)
 );
 
 SELECT musica.*
@@ -50,7 +43,3 @@ WHERE playlist_musica.fkPlaylist = 1;
 SELECT * FROM usuario;
 
 SELECT * FROM playlist;
-
-DELETE FROM playlist_musica WHERE fkPlaylist = 1 AND fkMusica = 1;
-
-SELECT idMusica, idSpotify FROM musicasRecentes WHERE fkUsuario = 1 ORDER BY idMusica DESC LIMIT 12;
