@@ -298,7 +298,6 @@ body {
     align-items: center;
     justify-content: space-evenly;
     height: 50px;
-    background: green;
 }
 
 .tituloPlay {
@@ -389,4 +388,10 @@ label {
     color: white;
     border: none;
     cursor: pointer;
+}
+
+.btnSpotify {
+    height: 100%;
+    width: 100px;
+    color: black;
 }

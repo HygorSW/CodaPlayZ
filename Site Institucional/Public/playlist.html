@@ -12,9 +12,9 @@
     <div class="main">
 
         <div class="navbar">
-            <div class="home">
+            <a href="./player.html" class="home" >
                 <h1>HOME</h1>
-            </div>
+            </a>
             <div class="user">
                 <div class="userInfo">
                     <p>Matheus Gomes</p>
@@ -47,11 +47,10 @@
                         <h1>TITULO</h1>
                     </div>
                     <div class="playerDiv">
-                        <div class="btnLeft">
-                            A
-                        </div>
-                        <div class="btnPlay">!</div>
-                        <div class="btnRight">B</div>
+                        <button class="btnSpotify" id="prev">⏮️ Anterior</button>
+                        <button class="btnSpotify" id="play">▶️ Tocar</button>
+                        <button class="btnSpotify" id="pause" style="display:none;">⏸️ Pausar</button>
+                        <button class="btnSpotify" id="next">⏭️ Próximo</button>
                     </div>
                 </div>
 
@@ -337,4 +336,84 @@
         })
     }
 
+    // Função para pegar o token do hash da URL
+    function getTokenFromUrl() {
+        const hash = window.location.hash.substring(1);
+        const params = new URLSearchParams(hash);
+        return params.get('access_token');
+    }
+
+    const token = getTokenFromUrl();
+
+    if (!token) {
+        document.getElementById('track-info').textContent = 'Token não encontrado. Por favor, faça login novamente.';
+    } else {
+        // Define a função global que o SDK chama quando estiver pronto
+        window.onSpotifyWebPlaybackSDKReady = () => {
+            const player = new Spotify.Player({
+                name: 'Meu Web Player',
+                getOAuthToken: cb => { cb(token); },
+                volume: 0.5
+            });
+
+            player.addListener('initialization_error', ({ message }) => { console.error('Erro na inicialização:', message); });
+            player.addListener('authentication_error', ({ message }) => {
+                console.error('Erro de autenticação:', message);
+                document.getElementById('track-info').textContent = 'Erro de autenticação, faça login novamente.';
+            });
+            player.addListener('account_error', ({ message }) => { console.error('Erro conta:', message); });
+            player.addListener('playback_error', ({ message }) => { console.error('Erro playback:', message); });
+
+            player.addListener('player_state_changed', state => {
+                if (!state) {
+                    document.getElementById('track-info').textContent = 'Nenhuma música tocando';
+                    return;
+                }
+                const currentTrack = state.track_window.current_track;
+                document.getElementById('track-info').textContent = `${currentTrack.name} — ${currentTrack.artists.map(a => a.name).join(', ')}`;
+                if (state.paused) {
+                    document.getElementById('play').style.display = 'inline-block';
+                    document.getElementById('pause').style.display = 'none';
+                } else {
+                    document.getElementById('play').style.display = 'none';
+                    document.getElementById('pause').style.display = 'inline-block';
+                }
+            });
+
+            player.addListener('ready', ({ device_id }) => {
+                console.log('Pronto com device ID', device_id);
+                // Transfere o playback para o Web Playback SDK
+                fetch('https://api.spotify.com/v1/me/player', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        device_ids: [device_id],
+                        play: false
+                    }),
+                }).then(() => {
+                    console.log('Playback transferido para o player da web');
+                }).catch(console.error);
+            });
+
+            player.addListener('not_ready', ({ device_id }) => {
+                console.log('Player ficou offline', device_id);
+            });
+
+            player.connect();
+
+            // Botões de controle
+            document.getElementById('play').onclick = () => player.resume().catch(console.error);
+            document.getElementById('pause').onclick = () => player.pause().catch(console.error);
+            document.getElementById('next').onclick = () => player.nextTrack().catch(console.error);
+            document.getElementById('prev').onclick = () => player.previousTrack().catch(console.error);
+        };
+
+        // Carrega o SDK do Spotify
+        const script = document.createElement('script');
+        script.src = "https://sdk.scdn.co/spotify-player.js";
+        document.body.appendChild(script);
+    }
 </script>
