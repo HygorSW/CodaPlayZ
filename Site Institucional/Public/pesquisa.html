@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Página de Pesquisa</title>
     <link rel="stylesheet" href="./styles/pesquisa.css">
     <link rel="stylesheet" href="./styles/navbar.css">
 </head>
@@ -17,101 +17,117 @@
         <a href="./playlist.html" class="home">
             <h1>PLAYLIST</h1>
         </a>
-
     </div>
 
     <div class="main">
-        <div class="header"><input type="text" id="input_pesquisa" placeholder="PESQUISAR..." oninput="buscarMusica()">
+        <div class="header">
+            <input type="text" id="input_pesquisa" placeholder="PESQUISAR..." oninput="buscarMusica()">
         </div>
         <div class="container">
             <div class="navContainer">
                 <h1>MÚSICAS</h1>
             </div>
             <div class="listaMusica" id="lista">
-                <div id="musicaDiv">
-                    <img src="./assets/imgs/playlistPage/snoop.png" alt="">
-                    <div class="infoMusic">
-                        <h1>titulo</h1>
-                        <p>artista</p>
-                    </div>
-                    <div class="btnMusica">
-                        <button>ADICIONAR MÚSICA</button>
-                        <button>OUVIR</button>
-                    </div>
-                </div>
+                <!-- Músicas aparecem aqui -->
             </div>
-
+        </div>
+    </div>
+    <!-- modal  -->
+    <div id="modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="btnGroup">
+                <button class="btnModal" onclick="EditarPlaylist()">Atualizar playlist</button>
+                <button class="btnModal" onclick="fecharModal()">Fechar</button>
+            </div>
         </div>
     </div>
 </body>
 
 </html>
 <script>
-    var musicaPesquisar = sessionStorage.MUSICA_PESQUISAR
-    var idUsuario = sessionStorage.ID_USUARIO
 
-    var token = sessionStorage.TOKEN
-    var deviceId = null
+    function abrirModal() {
+        document.getElementById('modal').classList.remove('hidden')
+    }
+
+    function fecharModal() {
+        document.getElementById('modal').classList.add('hidden')
+    }
+
+
+    var musicaPesquisar = sessionStorage.MUSICA_PESQUISAR;
+    var idUsuario = sessionStorage.ID_USUARIO;
+    var token = sessionStorage.TOKEN;
+    var deviceId = null;
+
+    if (!token) {
+        alert("Token de autenticação não encontrado. Faça login novamente.");
+    }
+
+    // Carrega o SDK do Spotify
+    const script = document.createElement("script");
+    script.src = "https://sdk.scdn.co/spotify-player.js";
+    document.body.appendChild(script);
 
     window.onSpotifyWebPlaybackSDKReady = () => {
         var player = new Spotify.Player({
             name: 'Player Web',
             getOAuthToken: cb => cb(token)
-        })
+        });
 
         player.addListener('ready', e => {
-            deviceId = e.device_id
-            console.log('Player pronto:', deviceId)
-        })
+            deviceId = e.device_id;
+            console.log('Player pronto:', deviceId);
+        });
 
-        player.connect()
+        player.connect();
     }
 
     function buscarMusica() {
-        musicaPesquisar = input_pesquisa.value
+        musicaPesquisar = input_pesquisa.value;
 
         fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(musicaPesquisar)}&type=track`, {
-            headers: { 'Authorization': 'Bearer ' + token }
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
         })
             .then(res => res.json())
             .then(dados => {
+                lista.innerHTML = '';
+                var musicas = dados.tracks.items;
 
-                lista.innerHTML = ''
-
-                var musicas = dados.tracks.items
-
-                musicas.array.forEach(resultado => {
-                    var musica = musicas[i]
-                    var nome = musica.name
-                    var artista = musica.artists[0].name
-                    var imagem = musica.album.images[0].url
-                    var uri = musica.uri
-                    var idSpotify = musica.id
+                musicas.forEach(musica => {
+                    var nome = musica.name;
+                    var artista = musica.artists[0].name;
+                    var imagem = musica.album.images[0].url;
+                    var uri = musica.uri;
+                    var idSpotify = musica.id;
 
                     lista.innerHTML += `
-
-                        <img src="${imagem}" alt="">
-                    <div class="infoMusic">
-                        <h1>${nome}</h1>
-                        <p>${artista}</p>
-                    </div>
-                    <div class="btnMusica">
-                        <button onclick="abrirPlaylist(${idSpotify})">ADICIONAR MÚSICA</button>
-                        <button onclick="tocar('${uri}')">OUVIR</button>
-                    </div>
-                    `
-                })
+              <div id="musicaDiv">
+                <img src="${imagem}" alt="">
+                <div class="infoMusic">
+                  <h1>${nome}</h1>
+                  <p>${artista}</p>
+                </div>
+                <div class="btnMusica">
+                  <button onclick="abrirPlaylist('${idSpotify}')">ADICIONAR MÚSICA</button>
+                  <button onclick="tocar('${uri}', '${idSpotify}')">OUVIR</button>
+                </div>
+              </div>
+            `;
+                });
             })
             .catch(function (erro) {
-                console.log(erro)
-                resultado.innerHTML = "<p>Erro na busca.</p>"
-            })
+                console.log(erro);
+                lista.innerHTML = "<p>Erro na busca.</p>";
+            });
     }
 
-    function tocar(uri) {
+    function tocar(uri, idSpotify) {
         if (!deviceId) {
-            alert('Player não está pronto. Aguarde...')
-            return
+            alert('Player não está pronto. Aguarde...');
+            return;
         }
 
         fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
@@ -121,7 +137,7 @@
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + token
             }
-        })
+        });
 
         fetch("/pesquisarRoute/adicionarMusicaRecente", {
             method: "POST",
@@ -133,49 +149,36 @@
                 idSpotifyServer: idSpotify
             })
         }).then(function (resposta) {
-            console.log("ESTOU NO THEN DO entrar()!")
-
             if (resposta.ok) {
-                console.log(resposta);
-
                 resposta.json().then(json => {
                     console.log(json);
-                    console.log(JSON.stringify(json));
                 });
-
             } else {
-
-                console.log("Houve um erro ao tentar add sua musica")
-
-                resposta.text().then(texto => {
-                    console.error(texto);
-                });
+                console.log("Erro ao adicionar música");
+                resposta.text().then(console.error);
             }
-
-        }).catch(function (erro) {
-            console.log(erro);
-        })
+        }).catch(console.error);
     }
 
     function abrirPlaylist(idSpotify) {
+        abrirModal();
         fetch(`/perfilRoute/buscarPlaylist?pkUsuario=${idUsuario}`, {
             method: "GET"
         })
             .then(response => response.json())
             .then(playlist => {
                 playlist.forEach(resultado => {
-                    var idPlaylis = resultado.idPlaylis
-
-                    div.innerHTML += `
+                    var idPlaylis = resultado.idPlaylis;
+                    lista.innerHTML += `
+              <div>
+                <div><h1>${resultado.nome}</h1></div>
                 <div>
-                    <div><h1>${resultado.nome}</h1></div>
-                    <div>
-                        <button onclick="adicionarMusica(${idSpotify}, ${idPlaylis})"></button>
-                    </div>
+                  <button onclick="adicionarMusica('${idSpotify}', ${idPlaylis})">Adicionar</button>
                 </div>
-                    `
-                })
-            })
+              </div>
+            `;
+                });
+            });
     }
 
     function adicionarMusica(idSpotify, idPlaylist) {
@@ -189,28 +192,14 @@
                 idPlaylistServer: idPlaylist
             })
         }).then(function (resposta) {
-            console.log("ESTOU NO THEN DO entrar()!")
-
             if (resposta.ok) {
-                console.log(resposta);
-
                 resposta.json().then(json => {
                     console.log(json);
-                    console.log(JSON.stringify(json));
                 });
-
             } else {
-
-                console.log("Houve um erro ao tentar add sua musica")
-
-                resposta.text().then(texto => {
-                    console.error(texto);
-                });
+                console.log("Erro ao adicionar música à playlist");
+                resposta.text().then(console.error);
             }
-
-        }).catch(function (erro) {
-            console.log(erro);
-        })
+        }).catch(console.error);
     }
-
 </script>
