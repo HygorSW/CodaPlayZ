@@ -10,6 +10,7 @@
 <body onload="buscarMusica()">
     <input type="text" id="input_nome">
     <button onclick="EditarPlaylist()">editar</button>
+    <button onclick="deletarMusica(2)">excluir</button>
 </body>
 
 </html>
@@ -114,6 +115,8 @@
             })
     }
 
+    //  função nativa - tocar musica
+
     window.onSpotifyWebPlaybackSDKReady = () => {
         var player = new Spotify.Player({
             name: 'Player Web',
@@ -128,6 +131,7 @@
         player.connect()
     }
 
+    //  chama função tocar musica
     function tocar(uri) {
         if (!deviceId) {
             alert('Player não está pronto. Aguarde...')
@@ -144,6 +148,8 @@
         })
     }
 
+
+    // deletar musica
     function deletarMusica(idMusica) {
         var musicaDeletar = idMusica
 
