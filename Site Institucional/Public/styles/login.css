@@ -13,7 +13,7 @@ html {
 }
 
 body{
-  background-image: url(../assets/icons/Frame\ 7.png);
+  background-image: url(../assets/icons/background-dark.png);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -108,7 +108,7 @@ body img{
 
 #btn-entrar{
   width: 63.5vh;
-  height: 30px;
+  height: 35px;
   font-size: 18px;
   border-radius: 10px;
   border: none;
@@ -121,13 +121,13 @@ body img{
 
   margin-top: 42%;
   position: fixed;
-  margin-left: 22%;
+  right: 0;
 }
 
 .cadastrar button{
   width: 30vh;
   height: 5vh;
-  border-radius: 10px ;
+  border-radius: 10px 0px 0px 10px;
   border: none;
   cursor: pointer;
   color: white;
