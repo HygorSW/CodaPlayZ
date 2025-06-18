@@ -47,7 +47,7 @@ body img{
   padding-top: 2.5vh;
   padding-bottom: 2.5vh;
   background: transparent;
-  color: white;
+  color: black;
 }
 
 .entrar input:focus{
@@ -159,11 +159,10 @@ transition: 0.3s;
 }
 
 #div_mensagem p{
-  color: black;
   font-size: 16px;
   transform: translateY(0px);
   padding: 0px;
-  color: white;
+  color: black;
   background: #1A1A1A;
   margin: 0;
 }
