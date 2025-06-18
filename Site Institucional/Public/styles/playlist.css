@@ -113,8 +113,12 @@ body {
     justify-content: space-between;
     flex-direction: column;
     padding: 10px;
+    transition: 0.5s;
+    cursor: pointer;
 }
-
+.playlistCard:hover {
+    transform: scale(1.05);
+}
 
 
 .containerTitulo {
@@ -172,6 +176,11 @@ body {
     border: 1px solid white;
     background: linear-gradient(83deg, #922db6 44.54%, #FF45D2 93.09%);
     font-size: 30px;
+    transition: 0.5s;
+    cursor: pointer;
+}
+.btnEspecifica:hover{
+    transform: scale(1.05);
 }
 
 /* navbar */
@@ -394,5 +403,9 @@ label {
 .btnSpotify {
     height: 100%;
     width: 100px;
+    color: black;
+}
+
+#input_descricao, #input_nome{
     color: black;
 }

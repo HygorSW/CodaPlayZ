@@ -1,15 +1,11 @@
 const querystring = require('querystring');
 const fetch = require('node-fetch');
 
-<<<<<<< HEAD
-const clientId = '2c1cdb1b3cec451c8bba713c6f27570d';
-const clientSecret = '6a738184530a4f3db28a4709dc13f89b';
-=======
+// const clientId = '2c1cdb1b3cec451c8bba713c6f27570d';
+// const clientSecret = '6a738184530a4f3db28a4709dc13f89b';
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const redirectUri = process.env.REDIRECT_URI;
->>>>>>> e1d7e6a7ddf3d22dbe5cd75065b89a7c0164d569
-
 exports.login = (req, res) => {
   const scope = [
     'streaming',

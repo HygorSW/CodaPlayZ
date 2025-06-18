@@ -147,7 +147,7 @@
                 <div class="containerTitulo">
 
                     <div id="tituloCard"><h1>${resultado.nome}</h1></div>
-                    <div id="legend-card">Descrição</div>
+                    <div id="legend-card">${resultado.descriacao}</div>
                 </div>
 
                 <div class="fotterCard">
@@ -169,7 +169,7 @@
         var nomePlaylist = input_nome.value;
         var descricaoPlaylist = input_descricao.value;
 
-        if (nomePlaylist == `` || descricaoPlaylist == ``) {
+        if (nomePlaylist == `` && descricaoPlaylist == ``) {
             div_mensagem.innerHTML = `Preencha todos os campos`
         } else if (nomePlaylist.length > 30) {
             div_mensagem.innerHTML = `O nomePlaylist pode ter no maximo 30 letras`
