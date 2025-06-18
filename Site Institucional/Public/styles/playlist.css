@@ -105,7 +105,7 @@ body {
 /* card geral */
 .playlistCard {
     width: 90%;
-    background: blue;
+    background: black;
     min-height: 200px;
     border-radius: 15px;
     display: flex;

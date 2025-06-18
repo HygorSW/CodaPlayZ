@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="./styles/playlist.css">
 </head>
 
-<body onload="buscarPlaylist(); buscarMusica(), buscarEspecifica()">
+<body>
     <div class="main">
 
         <div class="navbar">
@@ -44,7 +44,7 @@
                     <h1 id="tituloEspecifica">TITULO DA PLAYLIST</h1> <button class="btnHeader"
                         onclick="abrirModal()">MODAL</button>
                     <div class="descEspecifica">
-                        <p id="descricaoEspecifica">snoop dogg melhores músicas 2001’sF</p>
+                        <p id="descricaoEspecifica">snoop dogg melhores músicas 2001'sF</p>
                     </div>
                     <div class="btnEspecifica">PLAY</div>
                 </div>
@@ -63,7 +63,6 @@
                         <button class="btnSpotify" id="next">⏭️ Próximo</button>
                     </div>
                 </div>
-
                 <div class="listaMusicas">
                     <div class="musicaDiv">
                         <div class="infos">
@@ -109,47 +108,54 @@
 
 </html>
 <script>
+    // Variáveis globais
     var idUsuario = sessionStorage.ID_USUARIO;
     var idPlaylist = sessionStorage.PLAYLIST;
-    var emailUser = sessionStorage.EMAILUSER
-    var token = sessionStorage.TOKEN
+    var emailUser = sessionStorage.EMAILUSER;
+    var token = sessionStorage.TOKEN;
+    var deviceId = null;
 
+    // Inicialização da página
     window.onload = function () {
+        // Configura informações do usuário
         userInfo.innerHTML = `
-        <div class="userInfo" id="userInfo">
-            <p>${emailUser}</p>
-        </div>`
-        console.log(idPlaylist)
+            <div class="userInfo" id="userInfo">
+                <p>${emailUser}</p>
+            </div>`;
+        
+        console.log("ID Playlist:", idPlaylist);
 
+        // Carrega informações da playlist
         fetch(`/playlistRoute/buscarInfoPlaylist/${idPlaylist}`)
             .then(res => res.json())
             .then(infoPlaylist => {
-                console.log(infoPlaylist)
-                let imagem_playlist = infoPlaylist[0].imagem_playlist
-                console.log(imagem_playlist)
+                console.log("Info Playlist:", infoPlaylist);
+                let imagem_playlist = infoPlaylist[0].imagem_playlist;
+                console.log("Imagem Playlist:", imagem_playlist);
 
                 label_fotoPlaylist.innerHTML = `
                     <img src="./assets/imagens capa playlist/${imagem_playlist}" alt="">
-                    <input type="file" id="fotoPlaylist" oninput="alterarCapaPlaylist()">`
-
-
+                    <input type="file" id="fotoPlaylist" oninput="alterarCapaPlaylist()">`;
             })
+            .catch(error => console.error("Erro ao buscar info playlist:", error));
+
+        // Carrega dados iniciais
+        buscarPlaylist();
+        buscarMusica();
+        buscarEspecifica();
+        initializeSpotifyPlayer();
     }
 
+    // Funções de modal
     function abrirModal() {
-        document.getElementById('modal').classList.remove('hidden')
+        document.getElementById('modal').classList.remove('hidden');
     }
 
     function fecharModal() {
-        document.getElementById('modal').classList.add('hidden')
+        document.getElementById('modal').classList.add('hidden');
     }
 
-    function atualizarPage() {
-
-    }
-
-
-
+    // Funções de playlist
     function buscarEspecifica() {
         div.innerHTML = `<div class="tituloPlay">PLAYLIST</div>`;
         fetch(`/playlistRoute/buscarEspecifica?pkPlaylist=${idPlaylist}`, {
@@ -157,14 +163,12 @@
         })
             .then(response => response.json())
             .then(playlistEspecifica => {
-                console.log(playlistEspecifica);
+                console.log("Playlist Específica:", playlistEspecifica);
                 tituloEspecifica.innerHTML = `${playlistEspecifica[0].nome}`;
                 descricaoEspecifica.innerHTML = `${playlistEspecifica[0].descriacao}`;
-
             })
+            .catch(error => console.error("Erro ao buscar playlist específica:", error));
     }
-
-
 
     function buscarPlaylist() {
         idUsuario = sessionStorage.ID_USUARIO;
@@ -176,26 +180,25 @@
             .then(playlist => {
                 playlist.forEach(resultado => {
                     div.innerHTML += `
-                        <button class="playlistCard" onclick="redirecionarPagina('${resultado.idPlaylist}')">
-                <div class="containerTitulo">
-
-                    <div id="tituloCard"><h1>${resultado.nome}</h1></div>
-                    <div id="legend-card">${resultado.descriacao}</div>
-                </div>
-
-                <div class="fotterCard">
-                    <div class="btnPlay">PLAY</div>
-                </div>
-
-                    </button>
-                    `
-                })
+                        <button class="playlistCard" onclick="redirecionarPagina('${resultado.idPlaylist}')" style="background-image: url('./assets/imagens capa playlist/${resultado.imagem_playlist}' ); background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;"  >
+                            <div class="containerTitulo">
+                                <div id="tituloCard"><h1>${resultado.nome}</h1></div>
+                                <div id="legend-card">${resultado.descriacao}</div>
+                            </div>
+                            <div class="fotterCard">
+                                <div class="btnPlay">PLAY</div>
+                            </div>
+                        </button>`;
+                });
             })
+            .catch(error => console.error("Erro ao buscar playlists:", error));
     }
 
     function redirecionarPagina(idPlaylist) {
-        sessionStorage.PLAYLIST = idPlaylist
-        window.location.href = `playlist.html`
+        sessionStorage.PLAYLIST = idPlaylist;
+        window.location.href = `playlist.html`;
     }
 
     function EditarPlaylist() {
@@ -203,13 +206,13 @@
         var descricaoPlaylist = input_descricao.value;
 
         if (nomePlaylist == `` && descricaoPlaylist == ``) {
-            div_mensagem.innerHTML = `Preencha todos os campos`
+            alert(`Preencha todos os campos`);
         } else if (nomePlaylist.length > 30) {
-            div_mensagem.innerHTML = `O nomePlaylist pode ter no maximo 30 letras`
+            alert(`O nome da playlist pode ter no máximo 30 letras`);
         } else if (nomePlaylist.length < 3) {
-            div_mensagem.innerHTML = `A senha deve conter pelo menos 3 caracteres`
+            alert(`O nome da playlist deve conter pelo menos 3 caracteres`);
         } else if (idPlaylist == undefined) {
-            div_mensagem.innerHTML = `É necessário estar logado para criar uma playlist`
+            alert(`É necessário estar logado para editar uma playlist`);
         } else {
             fetch("/playlistRoute/editarPlaylist", {
                 method: "PUT",
@@ -222,32 +225,26 @@
                     nomePlaylistServer: nomePlaylist
                 })
             }).then(function (resposta) {
-                console.log("ESTOU NO THEN DO entrar()!")
-
                 if (resposta.ok) {
-                    console.log(resposta);
-
                     resposta.json().then(json => {
-                        console.log(json);
-                        console.log(JSON.stringify(json));
-                        alert(`Alteração de playlist - sucesso`)
-                        window.location = "./playlist.html"
+                        alert(`Alteração de playlist realizada com sucesso`);
+                        window.location = "./playlist.html";
                     });
-
                 } else {
-                    console.log("Houve um erro ao tentar realizar o edição!")
+                    console.log("Houve um erro ao tentar realizar a edição!");
                     resposta.text().then(texto => {
                         console.error(texto);
+                        alert("Erro ao editar playlist");
                     });
                 }
-
             }).catch(function (erro) {
                 console.log(erro);
-            })
+                alert("Erro ao conectar com o servidor");
+            });
         }
     }
 
-
+    // Funções de música
     function buscarMusica() {
         idPlaylist = sessionStorage.PLAYLIST;
 
@@ -256,85 +253,49 @@
         })
             .then(response => response.json())
             .then(dadosMusica => {
+                console.log("Dados Música:", dadosMusica);
                 dadosMusica.forEach(resultado => {
-                    var idMusica = resultado.idMusica
+                    var idMusica = resultado.idMusica;
 
                     fetch(`https://api.spotify.com/v1/tracks/${resultado.idSpotify}`, {
                         headers: { 'Authorization': 'Bearer ' + token }
                     })
                         .then(res => res.json())
                         .then(dados => {
-                            var resultado = document.getElementById('resultado')
-                            resultado.innerHTML = ""
+                            console.log("Dados Spotify:", dados);
+                            var resultadoDiv = document.getElementById('resultado');
+                            if (resultadoDiv) resultadoDiv.innerHTML = "";
 
-                            var musicas = dados.tracks.items
+                            // Adapte esta parte conforme a estrutura real da resposta da API Spotify
+                            var nome = dados.name;
+                            var imagem = dados.album.images[0].url;
+                            var uri = dados.uri;
+                            var artistas = dados.artists.map(artist => artist.name).join(', ');
 
-                            for (var i = 0; i < musicas.length; i++) {
-                                var musica = musicas[i]
-
-                                var nome = musica.name
-                                var imagem = musica.album.images[0].url
-                                var uri = musica.uri
-                                var artista = musica.artists
-
-                                resultado.innerHTML += `
-                                    <div onclick="tocar('${uri}')">
-                                        <img src="${imagem}" width="100"><br>
-                                        <p>Nome:</p> ${nome}<br>
-                                        <button onclick="deletarMusica(${idMusica})">Deletar Musica</button>
+                            // Atualize esta parte para corresponder à sua estrutura HTML
+                            document.querySelector('.listaMusicas').innerHTML += `
+                                <div class="musicaDiv">
+                                    <div class="infos">
+                                        <h1>1</h1>
+                                        <h1>${nome}</h1>
+                                        <p>${artistas}</p>
                                     </div>
-                                        `
-
-                                artista.forEach(dadosArtista => {
-                                    div.innerHTML += `<p>Artista:</p> ${dadosArtista.name}<br>`
-                                })
-                            }
+                                    <div class="btnFechar" onclick="deletarMusica(${idMusica})">
+                                        <h1>X</h1>
+                                    </div>
+                                </div>`;
                         })
                         .catch(function (erro) {
-                            console.log(erro)
-                            resultado.innerHTML = "<p>Erro na busca.</p>"
-                        })
-                })
+                            console.log(erro);
+                            alert("Erro na busca de músicas do Spotify");
+                        });
+                });
             })
+            .catch(error => console.error("Erro ao buscar músicas:", error));
     }
 
-    //  função nativa - tocar musica
-
-    window.onSpotifyWebPlaybackSDKReady = () => {
-        var player = new Spotify.Player({
-            name: 'Player Web',
-            getOAuthToken: cb => cb(token)
-        })
-
-        player.addListener('ready', e => {
-            deviceId = e.device_id
-            console.log('Player pronto:', deviceId)
-        })
-
-        player.connect()
-    }
-
-    //  chama função tocar musica
-    function tocar(uri) {
-        if (!deviceId) {
-            alert('Player não está pronto. Aguarde...')
-            return
-        }
-
-        fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
-            method: 'PUT',
-            body: JSON.stringify({ uris: [uri] }),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
-            }
-        })
-    }
-
-
-    // deletar musica
     function deletarMusica(idMusica) {
-        var musicaDeletar = idMusica
+        if (!confirm("Tem certeza que deseja excluir esta música?")) return;
 
         fetch("/playlistRoute/deletarMusica", {
             method: "POST",
@@ -343,82 +304,68 @@
             },
             body: JSON.stringify({
                 idPlaylistServer: idPlaylist,
-                idMusicaServer: musicaDeletar
+                idMusicaServer: idMusica
             })
         }).then(function (resposta) {
-            console.log("ESTOU NO THEN DO entrar()!")
-
             if (resposta.ok) {
-                console.log(resposta);
-
                 resposta.json().then(json => {
-                    console.log(json);
-                    console.log(JSON.stringify(json));
-
-                    window.location = "./playlist.html"
+                    alert("Música excluída com sucesso");
+                    window.location.reload();
                 });
-
             } else {
-
-                console.log("Houve um erro ao tentar deletar sua musica")
-
+                console.log("Houve um erro ao tentar deletar sua música");
                 resposta.text().then(texto => {
                     console.error(texto);
+                    alert("Erro ao excluir música");
                 });
             }
-
         }).catch(function (erro) {
             console.log(erro);
-        })
+            alert("Erro ao conectar com o servidor");
+        });
     }
 
-    // Função para pegar o token do hash da URL
-    function getTokenFromUrl() {
-        const hash = window.location.hash.substring(1);
-        const params = new URLSearchParams(hash);
-        return params.get('access_token');
-    }
+    // Spotify Player Functions
+    function initializeSpotifyPlayer() {
+        if (!token) {
+            console.error("Token não disponível");
+            return;
+        }
 
-    const token = getTokenFromUrl();
-
-    if (!token) {
-        document.getElementById('track-info').textContent = 'Token não encontrado. Por favor, faça login novamente.';
-    } else {
-        // Define a função global que o SDK chama quando estiver pronto
         window.onSpotifyWebPlaybackSDKReady = () => {
             const player = new Spotify.Player({
-                name: 'Meu Web Player',
+                name: 'Web Playback SDK',
                 getOAuthToken: cb => { cb(token); },
                 volume: 0.5
             });
 
-            player.addListener('initialization_error', ({ message }) => { console.error('Erro na inicialização:', message); });
-            player.addListener('authentication_error', ({ message }) => {
-                console.error('Erro de autenticação:', message);
-                document.getElementById('track-info').textContent = 'Erro de autenticação, faça login novamente.';
-            });
-            player.addListener('account_error', ({ message }) => { console.error('Erro conta:', message); });
-            player.addListener('playback_error', ({ message }) => { console.error('Erro playback:', message); });
+            // Error handling
+            player.addListener('initialization_error', ({ message }) => { console.error(message); });
+            player.addListener('authentication_error', ({ message }) => { console.error(message); });
+            player.addListener('account_error', ({ message }) => { console.error(message); });
+            player.addListener('playback_error', ({ message }) => { console.error(message); });
 
+            // Playback status updates
             player.addListener('player_state_changed', state => {
                 if (!state) {
-                    document.getElementById('track-info').textContent = 'Nenhuma música tocando';
+                    console.log("Nenhuma música tocando");
                     return;
                 }
+                
                 const currentTrack = state.track_window.current_track;
-                document.getElementById('track-info').textContent = `${currentTrack.name} — ${currentTrack.artists.map(a => a.name).join(', ')}`;
-                if (state.paused) {
-                    document.getElementById('play').style.display = 'inline-block';
-                    document.getElementById('pause').style.display = 'none';
-                } else {
-                    document.getElementById('play').style.display = 'none';
-                    document.getElementById('pause').style.display = 'inline-block';
-                }
+                console.log("Música atual:", currentTrack.name);
+                
+                // Atualiza a UI
+                document.getElementById('play').style.display = state.paused ? 'inline-block' : 'none';
+                document.getElementById('pause').style.display = state.paused ? 'none' : 'inline-block';
             });
 
+            // Ready
             player.addListener('ready', ({ device_id }) => {
-                console.log('Pronto com device ID', device_id);
-                // Transfere o playback para o Web Playback SDK
+                console.log('Ready with Device ID', device_id);
+                deviceId = device_id;
+                
+                // Transfere o playback para este dispositivo
                 fetch('https://api.spotify.com/v1/me/player', {
                     method: 'PUT',
                     headers: {
@@ -429,81 +376,82 @@
                         device_ids: [device_id],
                         play: false
                     }),
-                }).then(() => {
-                    console.log('Playback transferido para o player da web');
                 }).catch(console.error);
             });
 
+            // Not ready
             player.addListener('not_ready', ({ device_id }) => {
-                console.log('Player ficou offline', device_id);
+                console.log('Device ID has gone offline', device_id);
             });
 
+            // Connect to the player!
             player.connect();
 
-            // Botões de controle
-            document.getElementById('play').onclick = () => player.resume().catch(console.error);
-            document.getElementById('pause').onclick = () => player.pause().catch(console.error);
-            document.getElementById('next').onclick = () => player.nextTrack().catch(console.error);
-            document.getElementById('prev').onclick = () => player.previousTrack().catch(console.error);
+            // Button event listeners
+            document.getElementById('play').onclick = () => {
+                player.resume().catch(console.error);
+            };
+            
+            document.getElementById('pause').onclick = () => {
+                player.pause().catch(console.error);
+            };
+            
+            document.getElementById('next').onclick = () => {
+                player.nextTrack().catch(console.error);
+            };
+            
+            document.getElementById('prev').onclick = () => {
+                player.previousTrack().catch(console.error);
+            };
         };
 
-        // Carrega o SDK do Spotify
+        // Load the Spotify Web Playback SDK
         const script = document.createElement('script');
         script.src = "https://sdk.scdn.co/spotify-player.js";
         document.body.appendChild(script);
     }
 
+    function tocar(uri) {
+        if (!deviceId) {
+            alert('Player não está pronto. Aguarde...');
+            return;
+        }
+
+        fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+            method: 'PUT',
+            body: JSON.stringify({ uris: [uri] }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        }).catch(error => console.error("Erro ao tocar música:", error));
+    }
+
+    // Função para alterar capa da playlist
     function alterarCapaPlaylist() {
-        console.log("Cheguei na função")
+        if (!fotoPlaylist.files[0]) {
+            alert("Selecione uma imagem para alterar a capa");
+            return;
+        }
 
-        // if (novaDesc === "") {
-        //     // tudo_certo.innerHTML = `Preecha o campo descrição`
-
-        //     setTimeout(() => {
-        //         tudo_certo.innerHTML = ``
-        //     }, 4000)
-        // } else if (
-        //     foto.value &&
-        //     !(
-        //         foto.value.endsWith(".png") ||
-        //         foto.value.endsWith(".jpeg") ||
-        //         foto.value.endsWith(".jpg") ||
-        //         foto.value.endsWith(".gif") ||
-        //         foto.value.endsWith(".webp") ||
-        //         foto.value.endsWith(".mp4") ||
-        //         foto.value.endsWith(".svg")
-        //     )
-        // ) {
-
-        //     // tudo_certo.innerHTML = `Tipo de arquivo não suportado`
-
-        //     setTimeout(() => {
-        //         tudo_certo.innerHTML = ``
-        //     }, 5000)
-        // } else {
-        console.log(idUsuario, fotoPlaylist.files[0], idPlaylist)
-
-        const formData = new FormData()
-        formData.append('fotoPlaylist', fotoPlaylist.files[0])
-        formData.append('idUsuario', idUsuario)
-        formData.append('idPlaylist', idPlaylist)
+        const formData = new FormData();
+        formData.append('fotoPlaylist', fotoPlaylist.files[0]);
+        formData.append('idUsuario', idUsuario);
+        formData.append('idPlaylist', idPlaylist);
 
         fetch("/playlistRoute/alterarCapaPlaylist", {
             method: "POST",
             body: formData
         }).then(res => {
-            console.log(res)
-            console.log(`imagem adicionada`)
-
-            // tudo_certo.innerHTML = `<p style="color: blue;">Imagem enviado com sucesso</p>`
-
-            // setTimeout(() => {
-            //     location.reload();
-            // }, 1000)
-
+            if (res.ok) {
+                alert("Capa da playlist alterada com sucesso");
+                window.location.reload();
+            } else {
+                alert("Erro ao alterar capa da playlist");
+            }
         }).catch(err => {
-            console.log(erro)
-        })
+            console.error(err);
+            alert("Erro ao conectar com o servidor");
+        });
     }
-    // }
 </script>

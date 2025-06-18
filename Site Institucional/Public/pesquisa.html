@@ -35,7 +35,9 @@
     <!-- modal  -->
     <div id="modal" class="modal hidden">
         <div class="modal-content">
-            <div id="playlistOption"></div>
+            <div id="playlistOption">
+
+            </div>
             <div class="btnGroup">
                 <button class="btnModal" onclick="fecharModal()">Fechar</button>
             </div>
@@ -169,23 +171,23 @@
             .then(playlist => {
                 playlist.forEach(resultado => {
                     var idPlaylis = resultado.idPlaylis;
-
+                    playlistOption.innerHTML = `<div> <h1> PLAYLIST </h1> </div>`;
                     if (playlist.length >= 1) {
                         playlistOption.innerHTML += `
-                        <div>
-                            <div><h1>${resultado.nome}</h1></div>
-                            <div>
-                                <button onclick="adicionarMusica('${idSpotify}', ${idPlaylis})">Adicionar</button>
-                            </div>
-                        </div>
+                                <button onclick="adicionarMusica('${idSpotify}', ${resultado.idPlaylist})">
+                            <img src="${resultado.imagem_playlist}" alt="">
+                            <h1>${resultado.nome}</h1>
+                           </button>
                         `;
+
+
                     }
                 });
             });
     }
 
     function adicionarMusica(idSpotify, idPlaylist) {
-        fetch("/pesquisarRoute/adicionarMusica", {
+        fetch("/pesquisaRoute/adicionarMusica", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -197,7 +199,8 @@
         }).then(function (resposta) {
             if (resposta.ok) {
                 resposta.json().then(json => {
-                    console.log(json);
+                    alert('Música adicionada!');
+                    
                 });
             } else {
                 console.log("Erro ao adicionar música à playlist");

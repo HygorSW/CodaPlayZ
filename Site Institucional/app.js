@@ -18,8 +18,9 @@ var app = express();
 var playlistRouter = require("./src/routes/playlistRoute");
 var perfilRouter = require("./src/routes/perfilRoute");
 var usuarioRouter = require("./src/routes/usuarioRoute");
-const authRouter = require('./src/routes/authRoute');   
-const spotifyRouter = require('./src/routes/spotifyRoute'); 
+const authRouter = require('./src/routes/authRoute');
+const spotifyRouter = require('./src/routes/spotifyRoute');
+const pesquisaRouter = require('./src/routes/pesquisaRoute');
 
 
 
@@ -30,7 +31,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 
 
-
+app.use("/pesquisaRoute", pesquisaRouter);
 app.use("/playlistRoute", playlistRouter);
 app.use("/perfilRoute", perfilRouter);
 app.use("/usuarioRoute", usuarioRouter);
