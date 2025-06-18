@@ -29,12 +29,17 @@
             .then(playlist => {
                 playlist.forEach(resultado => {
                     div.innerHTML += `
-                    <button onclick="redirecionarPagina('${playlist.idPlaylist}')">
-                        <p>Nome:</p> ${playlist.nome}<br>
+                    <button onclick="redirecionarPagina('${resultado.idPlaylist}')">
+                        <p>Nome:</p> ${resultado.nome}<br>
                     </button>
                     `
                 })
             })
+    }
+
+    function redirecionarPagina(idPlaylist) {
+        sessionStorage.PLAYLIST = idPlaylist
+        window.location.href = `playlist.html`
     }
 
     function EditarPlaylist() {
@@ -94,9 +99,9 @@
             .then(response => response.json())
             .then(dadosMusica => {
                 dadosMusica.forEach(resultado => {
-                    var idMusica = dadosMusica.idMusica
+                    var idMusica = resultado.idMusica
 
-                    fetch(`https://api.spotify.com/v1/tracks/${dadosMusica.idSpotify}`, {
+                    fetch(`https://api.spotify.com/v1/tracks/${resultado.idSpotify}`, {
                         headers: { 'Authorization': 'Bearer ' + token }
                     })
                         .then(res => res.json())
@@ -123,7 +128,7 @@
                                         `
 
                                 artista.forEach(dadosArtista => {
-                                    div.innerHTML += `<p>Artista:</p> ${artista.name}<br>`
+                                    div.innerHTML += `<p>Artista:</p> ${dadosArtista.name}<br>`
                                 })
                             }
                         })
