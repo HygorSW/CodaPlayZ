@@ -169,14 +169,17 @@
             .then(playlist => {
                 playlist.forEach(resultado => {
                     var idPlaylis = resultado.idPlaylis;
-                    lista.innerHTML += `
-              <div>
-                <div><h1>${resultado.nome}</h1></div>
-                <div>
-                  <button onclick="adicionarMusica('${idSpotify}', ${idPlaylis})">Adicionar</button>
-                </div>
-              </div>
-            `;
+
+                    if (playlist.length >= 1) {
+                        modal.innerHTML += `
+                        <div>
+                            <div><h1>${resultado.nome}</h1></div>
+                            <div>
+                                <button onclick="adicionarMusica('${idSpotify}', ${idPlaylis})">Adicionar</button>
+                            </div>
+                        </div>
+                        `;
+                    }
                 });
             });
     }
