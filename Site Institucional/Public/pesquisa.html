@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+
+</html>
+<script>
+    var musicaPesquisar = sessionStorage.MUSICA_PESQUISAR
+    var idUsuario = sessionStorage.ID_USUARIO
+
+    var token = 'BQDd46wmzVhd3IKbsYLgZ9TfM7zeES5X7l6h376y6G-Clv3L1u-I5Fa7_e0P6wsxVywyx0geXzPCVvQhwFGlX-64bqOLDlLpYypRMS85eG-gMfZrk9BMXLlQUhsX7-WUMOlcEyfMoS8'
+    var deviceId = null
+
+    window.onSpotifyWebPlaybackSDKReady = () => {
+        var player = new Spotify.Player({
+            name: 'Player Web',
+            getOAuthToken: cb => cb(token)
+        })
+
+        player.addListener('ready', e => {
+            deviceId = e.device_id
+            console.log('Player pronto:', deviceId)
+        })
+
+        player.connect()
+    }
+
+    function buscarMusica() {
+        musicaPesquisar = input_musica.value
+
+        fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(nome)}&type=track`, {
+            headers: { 'Authorization': 'Bearer ' + token }
+        })
+            .then(res => res.json())
+            .then(dados => {
+                var resultado = document.getElementById('resultado')
+                resultado.innerHTML = ""
+
+                var musicas = dados.tracks.items
+
+                musicas.array.forEach(resultado => {
+                    var musica = musicas[i]
+                    var nome = musica.name
+                    var artista = musica.artists[0].name
+                    var imagem = musica.album.images[0].url
+                    var uri = musica.uri
+                    var idSpotify = musica.id
+
+                    resultado.innerHTML += `
+                        <div>
+                            <img src="${imagem}" width="100"><br>
+                            <b>${nome}</b><br>
+                            <b>${artista}</b><br>
+                            <button onclick="tocar('${uri}')">Tocar</button>
+                            <button onclick="abrirPlaylist()">+</button>
+                        </div>
+                    `
+                })
+            })
+            .catch(function (erro) {
+                console.log(erro)
+                resultado.innerHTML = "<p>Erro na busca.</p>"
+            })
+    }
+
+    function tocar(uri) {
+        if (!deviceId) {
+            alert('Player não está pronto. Aguarde...')
+            return
+        }
+
+        fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+            method: 'PUT',
+            body: JSON.stringify({ uris: [uri] }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        })
+    }
+
+    function abrirPlaylist() {
+        fetch(`/perfilRoute/buscarPlaylist?pkUsuario=${idUsuario}`, {
+            method: "GET"
+        })
+            .then(response => response.json())
+            .then(playlist => {
+                playlist.forEach(resultado => {
+                    div.innerHTML += `
+                <div class="containerTitulo">
+                    <div id="tituloCard"><h1>${resultado.nome}</h1></div>
+                </div>
+                    `
+                })
+            })
+    }
+
+</script>
