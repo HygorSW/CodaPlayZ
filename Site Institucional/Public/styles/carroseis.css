@@ -1,144 +1,219 @@
-body {
-    margin: 0px;
-    padding: 10px;
-    box-sizing: border-box;
-    font-family: "Barlow", sans-serif;
-    background: linear-gradient(239deg, #C315FF 22.85%, #FF45D2 85.89%);
+*{
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+}
+
+body{
+    width: 100%;
     height: 100vh;
-    width: 100vw;
-    overflow: hidden;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.div_esquerda_perfil {
-    width: 20%;
-    height: 90%;
-    padding: 2%;
-}
-
-.div_direita_perfil {
-    width: 60%;
-    height: 90%;
-    padding: 2%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-}
-
-/* Contêiner do carrossel */
-.div_carrosel_perfil {
-    padding: 3%;
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
+    gap: 15px;
+    background-color: #5F00EC;
+    background-image: url("../assets/imgs/playlistPage/fundo.svg");
+    background-position: center;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+.div_esquerda_perfil{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left: 15px;
+    width: 30%;
+    background-color: #0000008f;
+    border-radius: 10px;
+    height: 96%;
+}
+.div_direita_perfil{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-right: 15px;
+    height: 96%;
+    gap: 15px;
+}
+
+.div_carrosel_perfil{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
     height: 60%;
-    overflow-x: auto;
-    gap: 20px;
-    overflow-y: hidden;
-    scroll-behavior: smooth;
+    background-color: #0000008f;
     border-radius: 10px;
-    background: rgba(30, 30, 30, 0.80);
 }
 
-
-.div_quadrado_carrosel_perfil {
-    width: 29%;
+.div_carrosel_perfil .left{
+    width: 20%;
     height: 100%;
-    background-color: black;
-    color: white;
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
     align-items: center;
-    padding: 1rem;
-    border-radius: 8px;
-    flex-shrink: 0;
-    font-family: "Judson", serif;
-}
-
-.div_quadrado_carrosel_perfil img {
-    width: 100%;
-}
-
-.div_quadrado_carrosel_perfil span {
-    font-size: 4vh;
-    height: 2vh;
-    width: 80%;
-}
-
-.div_quadrado_carrosel_perfil h4 {
-    width: 80%;
-}
-
-.playlist_musicas {
-    border-radius: 10px;
-    background: rgba(30, 30, 30, 0.80);
-    height: 100%;
-    padding: 5%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-}
-
-.div_musicas_da_playlist {
-    height: 50%;
-    background-color: red;
-    overflow-y: scroll;
-    padding: 5px ;
-}
-
-.div_musicas_da_playlist div {
-    height: 25%;
-    margin-top: 2%;
-    width: 100%;
-    border-radius: 10px;
-    background: #1D1D1D;
-
-}
-
-.div_musica_atual_tocando {
-    height: 35%;
-    border-radius: 10px;
-    background: #1D1D1D;
-    padding: 5%;
-}
-.playlist_musicas span{
-color: #FFF;
-font-family: "Protest Strike";
-font-size: 2.5vh;
-font-style: normal;
-font-weight: 500;
-line-height: normal;
-}
-.div_musica_atual_tocando img{
-width:100%;
-height: 60%;
-  border-radius: 8px;
-object-fit: cover;
-}
-.bts_musica_atual_playlist{
-    height: 40%;
+    justify-content: center;
     
 }
-.playlists_pessoais {
-  margin-top: 5%;
-  padding: 1%;
-  height: 40%;
-  width: 100%;
-  border-radius: 10px;
-  background: rgba(30, 30, 30, 0.80);
-  display: flex;
-  flex-direction: row;
-  overflow-y: hidden;
+
+
+.div_carrosel_perfil .right{
+    margin-top: 70px;
+    width: 80%;
+    height: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding-left: 10px;
+    padding-right: 10px;
+    gap: 30px;
+    overflow-y: scroll; 
+    scrollbar-color: #888 transparent; /* Cor da linha e fundo para Firefox */
+}
+
+/* Para Chrome, Edge e Safari */
+.div_carrosel_perfil .right::-webkit-scrollbar {
+    width: 2px; /* Apenas uma linha fininha */
+}
+
+.div_carrosel_perfil .right::-webkit-scrollbar-thumb {
+    background-color: #888; /* Cor da linha de rolagem */
+    border-radius: 10px;
+}
+
+.div_carrosel_perfil .right::-webkit-scrollbar-track {
+    background: transparent; /* Fundo transparente */
+}
+
+
+
+
+.div_carrosel_perfil .right .cardsMusicas{
+    width: 230px;
+    height: 300px;
+    border-radius: 10px;
+    position: relative;
+    background-color: #0000008f;
+
+}
+
+
+.div_carrosel_perfil .right .cardsMusicas .imgIcon{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 30px;
+    z-index: 10;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.playlists_pessoais{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 40%;
+    background-color: #0000008f;
+    border-radius: 10px;
+}
+.cardsPlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+    width: 80%;
+    height: 60%;
+    max-height: 230px;
+    overflow-y: scroll;
+    scrollbar-width: thin; /* Para Firefox */
+    scrollbar-color: #888 transparent; /* Cor da linha e fundo para Firefox */
+}
+
+/* Para Chrome, Edge e Safari */
+.cardsPlay::-webkit-scrollbar {
+    width: 2px; /* Apenas uma linha fininha */
+}
+
+.cardsPlay::-webkit-scrollbar-thumb {
+    background-color: #888; /* Cor da linha de rolagem */
+    border-radius: 10px;
+}
+
+.cardsPlay::-webkit-scrollbar-track {
+    background: transparent; /* Fundo transparente */
+}
+
+.adicionarPlayList{
+    margin-top: 20px;
+ width: 15%;
+    height: 80%;
+    max-height: 230px;
+}
+
+.card{
+    width: 270px;
+    height: 160px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+}
+.card::before{
+    content: '';
+    position: absolute;
+    background-color: #00000099;
+    left: 0;
+    top: 0;
+     width: 270px;
+    height: 160px;
+}
+
+.card img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card .title{
+    position: absolute;
+    width: 250px;
+    font-size: 1.5rem;
+    font-weight: 500;
+    top: 10px;
+    left: 10px;
+    color: #fff;
+}
+.card .desc{
+    position: absolute;
+    top: 40px;
+    width: 200px;
+    left: 20px;
+    color: #fff;
 }
 
 .div_das_playlist {
-margin-top: 5%;
   width: 95%;
-  height: 60%;
+  height: 100%;
   padding-top: 5%;
   overflow-y: scroll;
   display: flex;
@@ -148,11 +223,9 @@ margin-top: 5%;
 
 .divsao_playlists  {
 background-color: aqua;
-height: 500px;
-width: 100%;
+height: 100%;
 display: flex;
 flex-direction: row;
-justify-content: space-around;
 }
 
 .divsao_playlists div {
@@ -161,8 +234,7 @@ justify-content: space-around;
   font-weight: bold;
   border-radius: 8px;
   width: 30%;
-  height:200px;
-  margin-bottom: 3%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
