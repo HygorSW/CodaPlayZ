@@ -22,7 +22,7 @@ function cadastrarPlaylist(req, res) {
 }
 
 function buscarPlaylist(req, res) {
-    var pkUsuario = req.query.idUsuario;
+    var pkUsuario = req.query.pkUsuario;
 
     perfilModel.buscarPlaylist(pkUsuario)
         .then(
