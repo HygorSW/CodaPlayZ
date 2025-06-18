@@ -12,7 +12,7 @@ router.get("/buscarPlaylist", function (req, res) {
     perfilController.buscarPlaylist(req, res)
 })
 
-router.get("/buscarMusicasRecentes", function(req, res) {
+router.get("/buscarMusicasRecentes", function (req, res) {
     perfilController.buscarMusicasRecentes(req, res)
 })
 

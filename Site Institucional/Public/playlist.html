@@ -7,17 +7,35 @@
     <title>Document</title>
 </head>
 
-<body onload="buscarMusica()">
+<body onload="buscarPlaylist(); buscarMusica()">
     <input type="text" id="input_nome">
     <button onclick="EditarPlaylist()">editar</button>
     <button onclick="deletarMusica(2)">excluir</button>
+    <button onclick="buscarPlaylist()">Buscar Playlist</button>
+    <div id="div"></div>
 </body>
 
 </html>
 <script>
     var token = ''
-    var idPlaylist = 1
+    var idUsuario = sessionStorage.ID_USUARIO;
 
+    function buscarPlaylist() {
+        div.innerHTML = ``;
+        fetch(`/perfilRoute/buscarPlaylist?pkUsuario=${idUsuario}`, {
+            method: "GET"
+        })
+            .then(response => response.json())
+            .then(playlist => {
+                playlist.forEach(resultado => {
+                    div.innerHTML += `
+                    <button onclick="redirecionarPagina('${playlist.idPlaylist}')">
+                        <p>Nome:</p> ${playlist.nome}<br>
+                    </button>
+                    `
+                })
+            })
+    }
 
     function EditarPlaylist() {
         var nomePlaylist = input_nome.value;
@@ -68,6 +86,8 @@
 
 
     function buscarMusica() {
+        idPlaylist = sessionStorage.PLAYLIST;
+
         fetch(`/musicaRoute/buscarMusica?idPlaylist=${idPlaylist}`, {
             method: "GET"
         })
