@@ -2,15 +2,14 @@ var database = require("../database/config")
 
 function buscarMusica(idPlaylist) {
     var instrucaoSql = `
-            SELECT * FROM playlist WHERE idPlaylist = ${idPlaylist};`;
+            SELECT * FROM musica WHERE pkPlaylist = ${idPlaylist};`;
     console.log("Executando a instrução SQL: Consulta de resultados \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
 
-
 function deletarMusica(idPlaylist, idMusica) {
     var instrucaoSql = `
-        DELETE FROM playlist_musica WHERE fkPlaylist = ${idPlaylist} AND fkMusica = ${idMusica};`;
+        DELETE FROM musica WHERE fkPlaylist = ${idPlaylist} AND idMusica = ${idMusica};`;
     console.log("Executando a instrução SQL: Consulta de resultados \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
