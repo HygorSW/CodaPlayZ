@@ -1,21 +1,34 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <title>Spotify Web Player</title>
+  <link rel="stylesheet" href="./styles/navbar.css">
   <style>
-    body { 
-      font-family: Arial, sans-serif; 
-      background: #121212; 
-      color: white; 
-      text-align:center; 
-      padding: 20px; 
+    body {
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: white;
+      text-align: center;
+      padding: 20px;
     }
-    #track-info { margin: 20px; }
-    button { margin: 5px; padding: 10px 15px; font-size: 16px; cursor: pointer; }
+
+    #track-info {
+      margin: 20px;
+    }
+
+    button {
+      margin: 5px;
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
     #search-section {
       margin: 20px 0;
     }
+
     #search-input {
       padding: 10px;
       width: 300px;
@@ -24,6 +37,7 @@
       border: none;
       outline: none;
     }
+
     #search-button {
       padding: 10px 15px;
       font-size: 16px;
@@ -34,6 +48,7 @@
       border-radius: 5px;
       margin-left: 5px;
     }
+
     #results {
       margin-top: 20px;
       max-width: 600px;
@@ -41,6 +56,7 @@
       margin-right: auto;
       text-align: left;
     }
+
     .track-item {
       display: flex;
       align-items: center;
@@ -49,21 +65,36 @@
       cursor: pointer;
       transition: background-color 0.2s;
     }
+
     .track-item:hover {
       background-color: #282828;
     }
+
     .track-item img {
       width: 64px;
       height: 64px;
       margin-right: 15px;
     }
+
     .track-info {
       flex-grow: 1;
     }
   </style>
 </head>
-<body>
 
+<body>
+  <div class="navbar">
+    <a href="./perfil.html" class="home">
+      <h1>HOME</h1>
+    </a>
+    <a href="./playlist.html" class="home">
+      <h1>PLAYLIST</h1>
+    </a>
+   
+  </div>
+
+  <div class="PlaylistGeral" id="div">
+  </div>
   <h1>Spotify Web Player</h1>
 
   <div id="search-section">
@@ -233,4 +264,5 @@
   </script>
 
 </body>
+
 </html>

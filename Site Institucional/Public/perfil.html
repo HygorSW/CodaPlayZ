@@ -8,6 +8,12 @@
     <link rel="stylesheet" href="styles/cadastro.css">
     <link rel="shortcut icon" href="" type="image/x-icon">
 </head>
+<style>
+    button {
+        height: 200px;
+        width: 200px;
+    }
+</style>
 
 <body onload="buscarPlaylist()">
 
@@ -28,7 +34,9 @@
             <button onclick="cadastrarPlaylist()">Criar Playlist</button>
         </div>
     </div>
-    <div id="div"></div>
+    <div id="div">
+
+    </div>
     <div>
 
     </div>
@@ -88,7 +96,7 @@
                         console.log(json);
                         console.log(JSON.stringify(json));
                         alert(`Cadastro de playlist - sucrsso`)
-                        window.location = "./playlist.html"
+                        window.location = "./perfil.html"
                     });
 
                 } else {
@@ -111,10 +119,11 @@
             .then(response => response.json())
             .then(playlist => {
                 console.log(playlist)
+                div.innerHTML = ` <h1>PLAYLISTS</h1> <br>`
                 playlist.forEach(resultado => {
                     div.innerHTML += `
                     <button onclick="redirecionarPagina('${resultado.idPlaylist}')">
-                        <p>Nome:</p> ${resultado.idPlaylist}<br>
+                        <p>Nome:</p> ${resultado.nome}<br>
                     </button>
                     `
                 })

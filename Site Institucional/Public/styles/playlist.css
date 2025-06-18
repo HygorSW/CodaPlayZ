@@ -185,6 +185,7 @@ body {
     justify-content: flex-end;
     left: 0;
     align-items: center;
+    gap: 10px;
 }
 
 /* nav user */

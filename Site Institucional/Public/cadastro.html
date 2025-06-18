@@ -11,9 +11,9 @@
 
 <body>
   <div class="entrar">
-    
+
     <div class="logo">
-            <img src="./assets/imgs/logo.png" alt="">
+      <img src="./assets/imgs/logo.png" alt="">
     </div>
     <div class="titulo">
       <h1>CADASTRAR</h1>
@@ -42,8 +42,8 @@
         <button id="btn-entrar" onclick="cadastrar()">ENTRAR</button>
       </div>
       <div class="login">
-            <a href="login.html"><button>Logar</button></a>
-        </div>
+        <a href="login.html"><button>Logar</button></a>
+      </div>
     </div>
   </div>
   <div class="carrossel">
@@ -55,15 +55,12 @@
 <script>
 
   function cadastrar() {
-    var nome = input_nome.value
     var email = input_email.value
     var senha = input_senha.value
     var confSenha = input_confSenha.value
 
-    if (nome == `` || email == `` || senha == `` || confSenha == ``) {
+    if (email == `` || senha == `` || confSenha == ``) {
       div_mensagem.innerHTML = `<p>Preencha todos os campos </p>`
-    } else if (nome.length > 12) {
-      div_mensagem.innerHTML = `<p>O nome deve `
     } else if (!email.includes('@') || !email.includes('.')) {
       div_mensagem.innerHTML = `<p> O email deve conter @ e . </p>`
     } else if (email.indexOf('@') === 0 || email.lastIndexOf('.') === email.length - 1) {
@@ -80,7 +77,6 @@
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          nomeServer: nome,
           emailServer: email,
           senhaServer: senha
         })
