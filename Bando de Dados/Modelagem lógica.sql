@@ -20,6 +20,7 @@ CREATE TABLE playlist (
     idPlaylist INT PRIMARY KEY AUTO_INCREMENT,
     pkUsuario INT NOT NULL,
     nome VARCHAR(300) NOT NULL,
+    descriacao TEXT,
     imagem_playlist TEXT,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT usuarioPlaylist FOREIGN KEY (pkUsuario)
