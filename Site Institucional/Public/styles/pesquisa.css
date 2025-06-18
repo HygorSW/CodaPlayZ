@@ -70,3 +70,39 @@ input#input_pesquisa {
     align-items: center;
     justify-content: center;
 }
+
+div#musicaDiv {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    border-bottom: 1px solid white;
+    position: relative;
+}
+
+img {
+    height: 100px;
+    width: 100px;
+    margin: 10px;
+}
+
+.btnMusica {
+    position: absolute;
+    right: 50px;
+    height: 100%;
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+button {
+    height: 40px;
+    width: 200px;
+    color: black;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+button:hover{
+    transform: scale(1.05);
+}
