@@ -18,6 +18,7 @@ function buscarPlaylist(pkUsuario) {
 
 function buscarMusicasRecentes(pkUsuario) {
     var instrucaoSql = `
+        SELECT * FROM musicasRecentes WHERE fkUsuario = ${pkUsuario} ORDER BY idMusica DESC LIMIT 12;
         `;
     console.log("Executando a instrução SQL: Consulta de resultados \n" + instrucaoSql);
     return database.executar(instrucaoSql);

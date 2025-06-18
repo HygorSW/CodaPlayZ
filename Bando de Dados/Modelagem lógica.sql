@@ -28,19 +28,11 @@ CREATE TABLE playlist (
 );
 
 CREATE TABLE musica (
-    idMusica INT PRIMARY KEY AUTO_INCREMENT,
-    idSpotify VARCHAR(300)
-);
-
-CREATE TABLE playlist_musica (
-    fkPlaylist INT NOT NULL,
-    fkMusica INT NOT NULL,
-    data_adicao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (fkPlaylist , fkMusica),
-    CONSTRAINT playlisAssociativa FOREIGN KEY (fkPlaylist)
-        REFERENCES playlist (idPlaylist),
-    CONSTRAINT musicaAssociativa FOREIGN KEY (fkMusica)
-        REFERENCES musica (idMusica)
+    idMusica INT AUTO_INCREMENT,
+    idSpotify VARCHAR(300),
+    pkPlaylist INT,
+    PRIMARY KEY (idMusica, pkPlaylist),
+    CONSTRAINT playlistMusica FOREIGN KEY (pkPlaylist) REFERENCES playlist (idPlaylist)
 );
 
 SELECT musica.*
