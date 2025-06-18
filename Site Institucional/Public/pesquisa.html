@@ -35,8 +35,8 @@
     <!-- modal  -->
     <div id="modal" class="modal hidden">
         <div class="modal-content">
+            <div id="playlistOption"></div>
             <div class="btnGroup">
-                <button class="btnModal" onclick="EditarPlaylist()">Atualizar playlist</button>
                 <button class="btnModal" onclick="fecharModal()">Fechar</button>
             </div>
         </div>
@@ -171,7 +171,7 @@
                     var idPlaylis = resultado.idPlaylis;
 
                     if (playlist.length >= 1) {
-                        modal.innerHTML += `
+                        playlistOption.innerHTML += `
                         <div>
                             <div><h1>${resultado.nome}</h1></div>
                             <div>
