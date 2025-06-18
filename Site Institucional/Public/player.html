@@ -7,16 +7,73 @@
     body { font-family: Arial, sans-serif; background: #121212; color: white; text-align:center; padding: 20px; }
     #track-info { margin: 20px; }
     button { margin: 5px; padding: 10px 15px; font-size: 16px; cursor: pointer; }
+    #searchResults {
+      margin-top: 20px;
+      text-align: left;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .track-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      background: #222;
+      padding: 10px;
+      border-radius: 6px;
+    }
+    .track-item img {
+      width: 64px;
+      height: 64px;
+      margin-right: 15px;
+      border-radius: 4px;
+    }
+    .track-info {
+      flex: 1;
+    }
+    audio {
+      margin-left: 10px;
+      outline: none;
+    }
+    #searchContainer {
+      margin-top: 30px;
+      margin-bottom: 10px;
+    }
+    #searchInput {
+      padding: 8px;
+      font-size: 16px;
+      width: 300px;
+      border-radius: 4px;
+      border: none;
+    }
+    #searchBtn {
+      padding: 9px 15px;
+      font-size: 16px;
+      margin-left: 8px;
+      cursor: pointer;
+      border-radius: 4px;
+      border: none;
+      background-color: #1db954;
+      color: white;
+    }
   </style>
 </head>
 <body>
 
   <h1>Spotify Web Player</h1>
+
   <div id="track-info">Carregando...</div>
   <button id="prev">⏮️ Anterior</button>
   <button id="play">▶️ Tocar</button>
   <button id="pause" style="display:none;">⏸️ Pausar</button>
   <button id="next">⏭️ Próximo</button>
+
+  <div id="searchContainer">
+    <input type="text" id="searchInput" placeholder="Digite o nome da música" />
+    <button id="searchBtn">Buscar</button>
+  </div>
+
+  <div id="searchResults"></div>
 
   <script>
     // Função para pegar o token do hash da URL
@@ -31,7 +88,9 @@
     if (!token) {
       document.getElementById('track-info').textContent = 'Token não encontrado. Por favor, faça login novamente.';
     } else {
-      // Define a função global que o SDK chama quando estiver pronto
+      // Salva o token no localStorage para outras funções, se quiser
+      localStorage.setItem('access_token', token);
+
       window.onSpotifyWebPlaybackSDKReady = () => {
         const player = new Spotify.Player({
           name: 'Meu Web Player',
@@ -65,7 +124,6 @@
 
         player.addListener('ready', ({ device_id }) => {
           console.log('Pronto com device ID', device_id);
-          // Transfere o playback para o Web Playback SDK
           fetch('https://api.spotify.com/v1/me/player', {
             method: 'PUT',
             headers: {
@@ -87,7 +145,6 @@
 
         player.connect();
 
-        // Botões de controle
         document.getElementById('play').onclick = () => player.resume().catch(console.error);
         document.getElementById('pause').onclick = () => player.pause().catch(console.error);
         document.getElementById('next').onclick = () => player.nextTrack().catch(console.error);
@@ -98,6 +155,53 @@
       const script = document.createElement('script');
       script.src = "https://sdk.scdn.co/spotify-player.js";
       document.body.appendChild(script);
+
+      // Função para buscar músicas
+      function searchTracks(query) {
+        fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track&limit=10`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          const resultsDiv = document.getElementById('searchResults');
+          if (!data.tracks || data.tracks.items.length === 0) {
+            resultsDiv.innerHTML = '<p>Nenhuma música encontrada.</p>';
+            return;
+          }
+
+          const tracks = data.tracks.items;
+          resultsDiv.innerHTML = tracks.map(track => `
+            <div class="track-item">
+              <img src="${track.album.images[2]?.url || ''}" alt="Capa do álbum" />
+              <div class="track-info">
+                <strong>${track.name}</strong><br/>
+                ${track.artists.map(artist => artist.name).join(', ')}
+              </div>
+              ${track.preview_url ? `<audio controls src="${track.preview_url}"></audio>` : ''}
+            </div>
+          `).join('');
+        })
+        .catch(err => {
+          console.error('Erro na busca:', err);
+          document.getElementById('searchResults').innerHTML = '<p>Erro ao buscar músicas.</p>';
+        });
+      }
+
+      document.getElementById('searchBtn').addEventListener('click', () => {
+        const query = document.getElementById('searchInput').value.trim();
+        if (!query) return alert('Digite o nome da música.');
+        searchTracks(query);
+      });
+
+      // Opcional: busca ao pressionar Enter na caixa de texto
+      document.getElementById('searchInput').addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          document.getElementById('searchBtn').click();
+        }
+      });
     }
   </script>
 
