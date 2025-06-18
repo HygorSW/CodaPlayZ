@@ -15,4 +15,8 @@ router.get("/buscarMusicasRecentes", function (req, res) {
     perfilController.buscarMusicasRecentes(req, res)
 })
 
+router.get("/buscarMusicasAleatoria", function (req, res) {
+    perfilController.buscarMusicasAleatoria(req, res)
+})
+
 module.exports = router

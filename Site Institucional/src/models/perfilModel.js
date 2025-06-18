@@ -24,8 +24,17 @@ function buscarMusicasRecentes(pkUsuario) {
     return database.executar(instrucaoSql);
 }
 
+function buscarMusicasAleatoria() {
+    var instrucaoSql = `
+        SELECT * FROM musica LIMIT 12;
+        `;
+    console.log("Executando a instrução SQL: Consulta de resultados \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 module.exports = {
     cadastrarPlaylist,
     buscarPlaylist,
-    buscarMusicasRecentes
+    buscarMusicasRecentes,
+    buscarMusicasAleatoria
 }

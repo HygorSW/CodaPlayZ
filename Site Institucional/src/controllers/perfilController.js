@@ -59,8 +59,27 @@ function buscarMusicasRecentes(req, res) {
         )
 }
 
+function buscarMusicasAleatoria(req, res) {
+
+    perfilModel.buscarMusicasAleatoria()
+        .then(
+            function (resultado) {
+                res.json(resultado)
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro)
+                console.log(
+                    "\n Houve um erro ao buscar playlist do usuário! Erro: "
+                );
+                res.status(500).json(erro.sqlMessage)
+            }
+        )
+}
+
 module.exports = {
     cadastrarPlaylist,
     buscarPlaylist,
-    buscarMusicasRecentes
+    buscarMusicasRecentes,
+    buscarMusicasAleatoria
 }
