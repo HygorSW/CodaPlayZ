@@ -63,7 +63,7 @@
                         <button class="btnSpotify" id="next">⏭️ Próximo</button>
                     </div>
                 </div>
-                <div class="listaMusicas">
+                <div class="listaMusicas" id="listaMusicaPlaylist">
                     <div class="musicaDiv">
                         <div class="infos">
                             <h1>1</h1>
@@ -83,7 +83,7 @@
 
     </div>
 
-    <button onclick="deletarMusica(2)">excluir</button>
+    <button onclick="deletarMusica()">excluir</button>
 
     <!-- modal  -->
     <div id="modal" class="modal hidden">
@@ -122,7 +122,7 @@
             <div class="userInfo" id="userInfo">
                 <p>${emailUser}</p>
             </div>`;
-        
+
         console.log("ID Playlist:", idPlaylist);
 
         // Carrega informações da playlist
@@ -143,7 +143,8 @@
         buscarPlaylist();
         buscarMusica();
         buscarEspecifica();
-        initializeSpotifyPlayer();
+        initializeSpotifyPlayer()
+        ;
     }
 
     // Funções de modal
@@ -247,6 +248,7 @@
     // Funções de música
     function buscarMusica() {
         idPlaylist = sessionStorage.PLAYLIST;
+        listaMusicaPlaylist.innerHTML += ''
 
         fetch(`/musicaRoute/buscarMusica?idPlaylist=${idPlaylist}`, {
             method: "GET"
@@ -254,8 +256,10 @@
             .then(response => response.json())
             .then(dadosMusica => {
                 console.log("Dados Música:", dadosMusica);
+                var numero = 0
                 dadosMusica.forEach(resultado => {
                     var idMusica = resultado.idMusica;
+                    numero += 1
 
                     fetch(`https://api.spotify.com/v1/tracks/${resultado.idSpotify}`, {
                         headers: { 'Authorization': 'Bearer ' + token }
@@ -270,20 +274,20 @@
                             var nome = dados.name;
                             var imagem = dados.album.images[0].url;
                             var uri = dados.uri;
-                            var artistas = dados.artists.map(artist => artist.name).join(', ');
+                            var artistas = dados.artists[0];
 
                             // Atualize esta parte para corresponder à sua estrutura HTML
-                            document.querySelector('.listaMusicas').innerHTML += `
+                            listaMusicaPlaylist.innerHTML += `
                                 <div class="musicaDiv">
-                                    <div class="infos">
-                                        <h1>1</h1>
-                                        <h1>${nome}</h1>
-                                        <p>${artistas}</p>
-                                    </div>
-                                    <div class="btnFechar" onclick="deletarMusica(${idMusica})">
-                                        <h1>X</h1>
-                                    </div>
-                                </div>`;
+                        <div class="infos">
+                            <h1>${numero}</h1>
+                            <h1>${nome}</h1>
+                            <p>${artistas}</p>
+                        </div>
+                        <div class="btnFechar">
+                            <h1 onclick="deletarMusica(${idMusica})">X</h1>
+                        </div>
+                    </div>`;
                         })
                         .catch(function (erro) {
                             console.log(erro);
@@ -351,10 +355,10 @@
                     console.log("Nenhuma música tocando");
                     return;
                 }
-                
+
                 const currentTrack = state.track_window.current_track;
                 console.log("Música atual:", currentTrack.name);
-                
+
                 // Atualiza a UI
                 document.getElementById('play').style.display = state.paused ? 'inline-block' : 'none';
                 document.getElementById('pause').style.display = state.paused ? 'none' : 'inline-block';
@@ -364,7 +368,7 @@
             player.addListener('ready', ({ device_id }) => {
                 console.log('Ready with Device ID', device_id);
                 deviceId = device_id;
-                
+
                 // Transfere o playback para este dispositivo
                 fetch('https://api.spotify.com/v1/me/player', {
                     method: 'PUT',
@@ -391,15 +395,15 @@
             document.getElementById('play').onclick = () => {
                 player.resume().catch(console.error);
             };
-            
+
             document.getElementById('pause').onclick = () => {
                 player.pause().catch(console.error);
             };
-            
+
             document.getElementById('next').onclick = () => {
                 player.nextTrack().catch(console.error);
             };
-            
+
             document.getElementById('prev').onclick = () => {
                 player.previousTrack().catch(console.error);
             };
