@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Protest+Strike&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    color: white;
+    font-family: "Protest Strike", sans-serif;
+    font-weight: 400;
+
+}
+
+body {
+    background-image: url(../assets/imgs/playlistPage/backgroundPlaylist.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    overflow: hidden;
+
+}
+
+.main {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+.header {
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+input#input_pesquisa {
+    width: 40%;
+    height: 40px;
+    border-radius: 20pc;
+    background: #b86ef0;
+    padding: 10px;
+}
+
+.container {
+    height: 80%;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.listaMusica {
+    width: 100%;
+    height: 85%;
+    background: black;
+    border-radius: 20px;
+    padding: 20px;
+    overflow-y: scroll;
+}
+
+.navContainer {
+    width: 20%;
+    height: 10%;
+    border-radius: 20px;
+    background: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
