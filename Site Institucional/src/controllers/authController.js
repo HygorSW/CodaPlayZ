@@ -5,6 +5,7 @@ const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const redirectUri = process.env.REDIRECT_URI;
 
+
 exports.login = (req, res) => {
   const scope = [
     'streaming',
@@ -51,7 +52,7 @@ exports.callback = async (req, res) => {
     const data = await tokenResponse.json();
 
     if (data.access_token) {
-      res.redirect(`/perfil.html#access_token=${data.access_token}&refresh_token=${data.refresh_token}`);
+      res.redirect(`./player.html#access_token=${data.access_token}&refresh_token=${data.refresh_token}`);
     } else {
       res.status(400).json({ error: 'Erro ao obter token', details: data });
     }
