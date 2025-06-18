@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro | CodaPlayZ</title>
-    <link rel="stylesheet" href="styles/cadastro.css">
+    <link rel="stylesheet" href="styles/perfil.css">
     <link rel="shortcut icon" href="" type="image/x-icon">
 </head>
 <style>
@@ -121,7 +121,7 @@
             .then(response => response.json())
             .then(playlist => {
                 console.log(playlist)
-                div.innerHTML = ` <h1>PLAYLISTS</h1> <br>`
+                div.innerHTML = ` <a href="playlist.html"><h1>PLAYLISTS</h1></a>`
                 playlist.forEach(resultado => {
                     div.innerHTML += `
                     <button onclick="redirecionarPagina('${resultado.idPlaylist}')">
