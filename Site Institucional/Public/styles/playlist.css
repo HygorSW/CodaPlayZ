@@ -152,7 +152,7 @@ body {
     width: 350px;
     border: 1px solid black;
     border-radius: 10px;
-    object-fit: contain;
+    object-fit: cover;
 }
 
 .infoEspecifica {
@@ -408,4 +408,8 @@ label {
 
 #input_descricao, #input_nome{
     color: black;
+}
+
+.containerEspecifica label input {
+    display: none;
 }

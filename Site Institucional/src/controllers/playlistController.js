@@ -85,6 +85,44 @@ function deletarMusica(req, res) {
         )
 }
 
+function alterarCapaPlaylist(req, res) {
+
+    var imagem = req.file.filename
+    var idUsuario = req.body.idUsuario
+    var idPlaylist = req.body.idPlaylist
+
+    if (idUsuario == undefined) {
+        res.status(400).sendo("Seu idUsuario está indefinido")
+    } else if (imagem == undefined) {
+        res.status(400).sendo("Seu imagem está indefinido")
+    } else if (idPlaylist == undefined) {
+        res.status(400).sendo("Seu idPlaylist está indefinido")
+    } else {
+
+        playlistModel.alterarCapaPlaylist(idUsuario, idPlaylist, imagem)
+            .then(resultado => {
+                res.status(201).send("Imagem alterada com sucesso");
+            }).catch(err => {
+                res.status(500).send(err);
+            });
+    }
+}
+
+function buscarInfoPlaylist(req, res) {
+
+    var idPlaylist = req.params.id
+
+
+    playlistModel.buscarInfoPlaylist(idPlaylist)
+        .then(
+            function (resultado) {
+                res.json(resultado)
+            }
+        ).catch(err => {
+            res.status(500).send(err);
+        });
+}
+
 module.exports = {
-    buscarMusica, editorPlaylist, deletarMusica, buscarPlaylist
+    buscarMusica, editorPlaylist, deletarMusica, buscarPlaylist, alterarCapaPlaylist, buscarInfoPlaylist
 }

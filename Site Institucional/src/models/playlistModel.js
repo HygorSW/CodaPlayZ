@@ -33,10 +33,27 @@ function buscarPlaylist(pkPlaylist) {
     return database.executar(instrucaoSql);
 }
 
+function alterarCapaPlaylist(idUsuario, idPlaylist, imagem) {
+    var instrucao = `UPDATE playlist SET imagem_playlist = '${imagem}' WHERE idPlaylist = ${idPlaylist};`
+
+    console.log("Executando a instrução SQL: Consulta de resultados \n" + instrucao);
+    return database.executar(instrucao);
+}
+
+function buscarInfoPlaylist(idPlaylist) {
+    var instrucaoSql = `
+        SELECT imagem_playlist FROM playlist WHERE idPlaylist = ${idPlaylist};`;
+
+    console.log("Executando a instrução SQL: Consulta de resultados \n" + idPlaylist);
+    return database.executar(instrucaoSql);
+}
+
 
 module.exports = {
     buscarMusica,
     deletarMusica,
     editarPlaylist,
-    buscarPlaylist
+    buscarPlaylist,
+    alterarCapaPlaylist,
+    buscarInfoPlaylist
 }

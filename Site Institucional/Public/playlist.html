@@ -19,11 +19,10 @@
                 <h1>MÚSICAS</h1>
             </a>
             <div class="user">
-                <div class="userInfo">
+                <div class="userInfo" id="userInfo">
                     <p>Matheus Gomes</p>
                     <p>Matheus@gmail.com</p>
                 </div>
-                <img src="./assets/imgs/playlistPage/snoop.png" alt="">
             </div>
         </div>
 
@@ -32,7 +31,12 @@
 
         <div class="containerPlaylist">
             <div class="containerEspecifica">
-                <img src="./assets/imgs/playlistPage/snoop.png" alt="">
+
+                <label for="fotoPlaylist" id="label_fotoPlaylist">
+                    <img src="./assets/imgs/playlistPage/snoop.png" alt="">
+                    <input type="file" id="fotoPlaylist" oninput="alterarCapaPlaylist()">
+                </label>
+
                 <div class="infoEspecifica">
                     <h1 id="tituloEspecifica">TITULO DA PLAYLIST</h1> <button class="btnHeader"
                         onclick="abrirModal()">MODAL</button>
@@ -102,6 +106,32 @@
 
 </html>
 <script>
+    var idUsuario = sessionStorage.ID_USUARIO;
+    var idPlaylist = sessionStorage.PLAYLIST;
+    var emailUser = sessionStorage.EMAILUSER
+
+    window.onload = function () {
+        userInfo.innerHTML = `
+        <div class="userInfo" id="userInfo">
+            <p>${emailUser}</p>
+        </div>`
+        console.log(idPlaylist)
+
+        fetch(`/playlistRoute/buscarInfoPlaylist/${idPlaylist}`)
+            .then(res => res.json())
+            .then(infoPlaylist => {
+                console.log(infoPlaylist)
+                let imagem_playlist = infoPlaylist[0].imagem_playlist
+                console.log(imagem_playlist)
+
+                label_fotoPlaylist.innerHTML = `
+                    <img src="./assets/imagens capa playlist/${imagem_playlist}" alt="">
+                    <input type="file" id="fotoPlaylist" oninput="alterarCapaPlaylist()">`
+
+
+            })
+    }
+
     function abrirModal() {
         document.getElementById('modal').classList.remove('hidden')
     }
@@ -114,8 +144,7 @@
 
     }
 
-    var idUsuario = sessionStorage.ID_USUARIO;
-    var idPlaylist = sessionStorage.PLAYLIST;
+
 
     function buscarEspecifica() {
         div.innerHTML = `<div class="tituloPlay">PLAYLIST</div>`;
@@ -419,4 +448,58 @@
         script.src = "https://sdk.scdn.co/spotify-player.js";
         document.body.appendChild(script);
     }
+
+    function alterarCapaPlaylist() {
+        console.log("Cheguei na função")
+
+        // if (novaDesc === "") {
+        //     // tudo_certo.innerHTML = `Preecha o campo descrição`
+
+        //     setTimeout(() => {
+        //         tudo_certo.innerHTML = ``
+        //     }, 4000)
+        // } else if (
+        //     foto.value &&
+        //     !(
+        //         foto.value.endsWith(".png") ||
+        //         foto.value.endsWith(".jpeg") ||
+        //         foto.value.endsWith(".jpg") ||
+        //         foto.value.endsWith(".gif") ||
+        //         foto.value.endsWith(".webp") ||
+        //         foto.value.endsWith(".mp4") ||
+        //         foto.value.endsWith(".svg")
+        //     )
+        // ) {
+
+        //     // tudo_certo.innerHTML = `Tipo de arquivo não suportado`
+
+        //     setTimeout(() => {
+        //         tudo_certo.innerHTML = ``
+        //     }, 5000)
+        // } else {
+        console.log(idUsuario, fotoPlaylist.files[0], idPlaylist)
+
+        const formData = new FormData()
+        formData.append('fotoPlaylist', fotoPlaylist.files[0])
+        formData.append('idUsuario', idUsuario)
+        formData.append('idPlaylist', idPlaylist)
+
+        fetch("/playlistRoute/alterarCapaPlaylist", {
+            method: "POST",
+            body: formData
+        }).then(res => {
+            console.log(res)
+            console.log(`imagem adicionada`)
+
+            // tudo_certo.innerHTML = `<p style="color: blue;">Imagem enviado com sucesso</p>`
+
+            // setTimeout(() => {
+            //     location.reload();
+            // }, 1000)
+
+        }).catch(err => {
+            console.log(erro)
+        })
+    }
+    // }
 </script>
