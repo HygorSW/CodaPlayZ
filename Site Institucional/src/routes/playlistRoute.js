@@ -15,9 +15,8 @@ router.post("/deletarMusica", function (req, res) {
     playlistController.deletarMusica(req, res)
 })
 
-router.get("/buscarPlaylist", function (req, res) {
-    perfilController.buscarPlaylist(req, res)
+router.get("/buscarEspecifica", function (req, res) {
+    playlistController.buscarPlaylist(req, res)
 })
-
 
 module.exports = router

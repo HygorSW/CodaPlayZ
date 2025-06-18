@@ -15,10 +15,20 @@ function deletarMusica(idPlaylist, idMusica) {
     return database.executar(instrucaoSql);
 }
 
-
-function editarPlaylist(idPlaylist, nomePlaylist) {
+function editarPlaylist(idPlaylist, nomePlaylist, descricaoPlaylist) {
     var instrucaoSql = `
-        update playlist set nome = '${nomePlaylist}' where idPlaylist = ${idPlaylist};`;
+        UPDATE playlist 
+        SET nome = '${nomePlaylist}', 
+            descriacao = '${descricaoPlaylist}' 
+        WHERE idPlaylist = ${idPlaylist};
+    `;
+    console.log("Executando a instrução SQL: Consulta de resultados \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+function buscarPlaylist(pkPlaylist) {
+    var instrucaoSql = `
+        SELECT * FROM playlist WHERE idPlaylist = ${pkPlaylist};`;
     console.log("Executando a instrução SQL: Consulta de resultados \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
@@ -27,5 +37,6 @@ function editarPlaylist(idPlaylist, nomePlaylist) {
 module.exports = {
     buscarMusica,
     deletarMusica,
-    editarPlaylist
+    editarPlaylist,
+    buscarPlaylist
 }

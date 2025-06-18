@@ -1,0 +1,392 @@
+@import url('https://fonts.googleapis.com/css2?family=Protest+Strike&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    color: white;
+    font-family: "Protest Strike", sans-serif;
+    font-weight: 400;
+
+}
+
+body {
+    background-image: url(../assets/imgs/playlistPage/backgroundPlaylist.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    overflow: hidden;
+
+}
+
+.main {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
+    margin-top: 30px;
+}
+
+/* containers */
+.containerMusicas {
+    height: 50%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.82);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+    border-radius: 10px;
+}
+
+.PlaylistGeral {
+    height: 85%;
+    width: 20%;
+    background: rgba(0, 0, 0, 0.82);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px;
+    border-radius: 15px;
+    flex-direction: column;
+    gap: 15px;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: #5f3dc4 #1e1034;
+}
+
+.containerEspecifica {
+    height: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    gap: 5%;
+    align-items: flex-start;
+}
+
+.descEspecifica {
+    min-height: 150px;
+    max-width: 650px;
+    word-break: break-word;
+}
+
+/* Scrollbar estilizado para Chrome, Edge, Safari */
+.PlaylistGeral::-webkit-scrollbar {
+    width: 6px;
+}
+
+.PlaylistGeral::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+}
+
+.PlaylistGeral::-webkit-scrollbar-thumb {
+    background-color: #5f3dc4;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+.PlaylistGeral::-webkit-scrollbar-thumb:hover {
+    background-color: #7c5fe6;
+}
+
+.containerPlaylist {
+    width: 75%;
+    height: 85%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* card geral */
+.playlistCard {
+    width: 90%;
+    background: blue;
+    min-height: 200px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    padding: 10px;
+}
+
+
+
+.containerTitulo {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 40%;
+    justify-content: center;
+    color: white;
+    align-items: center;
+}
+
+#tituloCard {
+    display: flex;
+    justify-content: flex-start;
+    font-size: 15px;
+    padding: 5px;
+    width: 100%;
+}
+
+#legend-card {
+    font-size: 12px;
+    font-weight: normal;
+    display: flex;
+    justify-content: flex-start;
+    width: 90%;
+}
+
+.containerEspecifica img {
+    height: 350px;
+    width: 350px;
+    border: 1px solid black;
+    border-radius: 10px;
+    object-fit: contain;
+}
+
+.infoEspecifica {
+    height: 100%;
+    width: 70%;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+/* btn */
+.btnEspecifica {
+    height: 40px;
+    width: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    border: 1px solid white;
+    background: linear-gradient(83deg, #922db6 44.54%, #FF45D2 93.09%);
+    font-size: 30px;
+}
+
+/* navbar */
+.navbar {
+    display: flex;
+    flex-direction: row;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 65px;
+    justify-content: flex-end;
+    left: 0;
+    align-items: center;
+}
+
+/* nav user */
+.user {
+    width: 14%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10%;
+    padding-right: 1%;
+    align-items: center;
+}
+
+.user img {
+    height: 50px;
+    width: 50px;
+    object-fit: contain;
+    border-radius: 50%;
+    border: 1px solid black;
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    color: white;
+}
+
+/* musica atual */
+.divMusicaAtual img {
+    height: 250px;
+    width: 250px;
+    object-fit: cover;
+    border: 1px solid white;
+}
+
+.divMusicaAtual {
+    height: 100%;
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+.musicaDiv {
+    display: flex;
+    flex-direction: row;
+    width: 95%;
+    align-items: center;
+    border: 1px solid white;
+    border-radius: 15px;
+    height: 50px;
+    justify-content: space-around;
+}
+
+
+.listaMusicas {
+    width: 65%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: scroll;
+    padding: 10px;
+}
+
+
+.listaMusicas::-webkit-scrollbar {
+    width: 6px;
+}
+
+.listaMusicas::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.listaMusicas::-webkit-scrollbar-thumb {
+    background-color: #5f3dc4;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+.listaMusicas::-webkit-scrollbar-thumb:hover {
+    background-color: #7c5fe6;
+}
+
+.infos {
+    width: 80%;
+    display: flex;
+    align-items: center;
+    gap: 5%;
+    padding: 30px;
+}
+
+.btnFechar {
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+    background: gray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+}
+
+.playerDiv {
+    width: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 50px;
+    background: green;
+}
+
+.tituloPlay {
+    width: 90%;
+    display: flex;
+    justify-content: flex-start;
+    min-height: 30px;
+    align-items: flex-end;
+    font-size: 20px;
+    max-height: 30px;
+}
+
+.tituloPlay {
+    width: 90%;
+    display: flex;
+    justify-content: flex-start;
+    min-height: 30px;
+    align-items: flex-end;
+    font-size: 20px;
+}
+
+#tituloEspecifica {
+    font-size: 60px;
+}
+
+#descricaoEspecifica {
+    font-weight: lighter;
+    font-size: 40px;
+    font-family: sans-serif;
+}
+
+
+
+/* modal */
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+}
+
+label {
+    color: black;
+
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    min-height: 500px;
+    min-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}
+
+.hidden {
+    display: none;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.rowlabels {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    min-height: 100px;
+}
+
+.btnModal {
+    height: 40px;
+    width: 100px;
+    background: green;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
