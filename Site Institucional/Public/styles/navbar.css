@@ -1,0 +1,38 @@
+/* navbar */
+.navbar {
+    display: flex;
+    flex-direction: row;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 65px;
+    justify-content: flex-end;
+    left: 0;
+    align-items: center;
+    gap: 10px;
+}
+
+/* nav user */
+.user {
+    width: 14%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10%;
+    padding-right: 1%;
+    align-items: center;
+}
+
+.user img {
+    height: 50px;
+    width: 50px;
+    object-fit: contain;
+    border-radius: 50%;
+    border: 1px solid black;
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    color: white;
+}

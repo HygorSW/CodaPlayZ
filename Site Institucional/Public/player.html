@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Spotify Web Player</title>
+  <link rel="stylesheet" href="./styles/navbar.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    #track-info {
+      margin: 20px;
+    }
+
+    button {
+      margin: 5px;
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #search-section {
+      margin: 20px 0;
+    }
+
+    #search-input {
+      padding: 10px;
+      width: 300px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+    }
+
+    #search-button {
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      background-color: #1DB954;
+      color: white;
+      border-radius: 5px;
+      margin-left: 5px;
+    }
+
+    #results {
+      margin-top: 20px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+    }
+
+    .track-item {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #333;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .track-item:hover {
+      background-color: #282828;
+    }
+
+    .track-item img {
+      width: 64px;
+      height: 64px;
+      margin-right: 15px;
+    }
+
+    .track-info {
+      flex-grow: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="navbar">
+    <a href="./perfil.html" class="home">
+      <h1>HOME</h1>
+    </a>
+    <a href="./playlist.html" class="home">
+      <h1>PLAYLIST</h1>
+    </a>
+   
+  </div>
+
+  <div class="PlaylistGeral" id="div">
+  </div>
+  <h1>Spotify Web Player</h1>
+
+  <div id="search-section">
+    <input id="search-input" type="text" placeholder="Digite o nome da música..." />
+    <button id="search-button">Buscar</button>
+  </div>
+
+  <div id="track-info">Carregando...</div>
+
+  <div id="results"></div>
+
+  <button id="prev">⏮️ Anterior</button>
+  <button id="play">▶️ Tocar</button>
+  <button id="pause" style="display:none;">⏸️ Pausar</button>
+  <button id="next">⏭️ Próximo</button>
+
+  <script>
+    // Função para pegar o token do hash da URL
+    function getTokenFromUrl() {
+      const hash = window.location.hash.substring(1);
+      const params = new URLSearchParams(hash);
+      return params.get('access_token');
+    }
+
+    const token = getTokenFromUrl();
+
+    if (!token) {
+      document.getElementById('track-info').textContent = 'Token não encontrado. Por favor, faça login novamente.';
+    } else {
+      let deviceId = null;
+
+      window.onSpotifyWebPlaybackSDKReady = () => {
+        const player = new Spotify.Player({
+          name: 'Meu Web Player',
+          getOAuthToken: cb => { cb(token); },
+          volume: 0.5
+        });
+
+        player.addListener('initialization_error', ({ message }) => { console.error('Erro na inicialização:', message); });
+        player.addListener('authentication_error', ({ message }) => {
+          console.error('Erro de autenticação:', message);
+          document.getElementById('track-info').textContent = 'Erro de autenticação, faça login novamente.';
+        });
+        player.addListener('account_error', ({ message }) => { console.error('Erro conta:', message); });
+        player.addListener('playback_error', ({ message }) => { console.error('Erro playback:', message); });
+
+        player.addListener('player_state_changed', state => {
+          if (!state) {
+            document.getElementById('track-info').textContent = 'Nenhuma música tocando';
+            return;
+          }
+          const currentTrack = state.track_window.current_track;
+          document.getElementById('track-info').textContent = `${currentTrack.name} — ${currentTrack.artists.map(a => a.name).join(', ')}`;
+          if (state.paused) {
+            document.getElementById('play').style.display = 'inline-block';
+            document.getElementById('pause').style.display = 'none';
+          } else {
+            document.getElementById('play').style.display = 'none';
+            document.getElementById('pause').style.display = 'inline-block';
+          }
+        });
+
+        player.addListener('ready', ({ device_id }) => {
+          console.log('Pronto com device ID', device_id);
+          deviceId = device_id;
+
+          fetch('https://api.spotify.com/v1/me/player', {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+              device_ids: [device_id],
+              play: false
+            }),
+          }).then(() => {
+            console.log('Playback transferido para o player da web');
+          }).catch(console.error);
+        });
+
+        player.addListener('not_ready', ({ device_id }) => {
+          console.log('Player ficou offline', device_id);
+        });
+
+        player.connect();
+
+        // Controles do player
+        document.getElementById('play').onclick = () => player.resume().catch(console.error);
+        document.getElementById('pause').onclick = () => player.pause().catch(console.error);
+        document.getElementById('next').onclick = () => player.nextTrack().catch(console.error);
+        document.getElementById('prev').onclick = () => player.previousTrack().catch(console.error);
+
+        // Função para tocar a música clicada
+        window.playTrack = (uri) => {
+          if (!deviceId) {
+            alert('Player ainda não está pronto. Aguarde alguns segundos.');
+            return;
+          }
+          fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+            method: 'PUT',
+            body: JSON.stringify({ uris: [uri] }),
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            }
+          }).catch(err => {
+            console.error('Erro ao tentar tocar a música:', err);
+            alert('Erro ao tentar tocar a música');
+          });
+        };
+
+        // Função para buscar músicas na API do Spotify
+        async function searchTracks(query) {
+          if (!query) {
+            document.getElementById('results').innerHTML = '';
+            return;
+          }
+          try {
+            const response = await fetch(`https://api.spotify.com/v1/search?type=track&q=${encodeURIComponent(query)}&limit=10`, {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            });
+            const data = await response.json();
+            if (!data.tracks) {
+              document.getElementById('results').innerHTML = 'Nenhum resultado encontrado.';
+              return;
+            }
+            const tracks = data.tracks.items;
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = tracks.map(track => `
+              <div class="track-item" onclick="playTrack('${track.uri}')">
+                <img src="${track.album.images[2]?.url || ''}" alt="Capa do álbum" />
+                <div class="track-info">
+                  <strong>${track.name}</strong><br/>
+                  ${track.artists.map(artist => artist.name).join(', ')}
+                </div>
+              </div>
+            `).join('');
+          } catch (error) {
+            console.error('Erro na busca:', error);
+            document.getElementById('results').innerHTML = 'Erro ao buscar músicas.';
+          }
+        }
+
+        // Evento do botão de busca
+        document.getElementById('search-button').onclick = () => {
+          const query = document.getElementById('search-input').value.trim();
+          searchTracks(query);
+        };
+
+        // Também buscar ao apertar Enter no input
+        document.getElementById('search-input').addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            const query = e.target.value.trim();
+            searchTracks(query);
+          }
+        });
+      };
+
+      // Carrega o SDK do Spotify
+      const script = document.createElement('script');
+      script.src = "https://sdk.scdn.co/spotify-player.js";
+      document.body.appendChild(script);
+    }
+  </script>
+
+</body>
+
+</html>

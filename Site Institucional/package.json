@@ -4,18 +4,18 @@
     "description": "",
     "main": "app.js",
     "scripts": {
-      "start": "node app.js",
-      "dev": "nodemon --exec node app.js"
+        "start": "node app.js",
+        "dev": "nodemon --exec node app.js"
     },
     "author": "Feito pelos desenvolvedores @ São Paulo Tech School / Bandtec Digital School",
     "license": "MIT",
     "dependencies": {
-      "cors": "^2.8.5",
-      "dotenv": "^16.4.5",
-      "express": "^4.17.1",
-      "mysql2": "^3.9.4",
-      "nodemon": "^2.0.7",
-      "path": "^0.12.7"
+        "cors": "^2.8.5",
+        "dotenv": "^16.5.0",
+        "express": "^4.21.2",
+        "mysql2": "^3.9.4",
+        "node-fetch": "^2.7.0",
+        "nodemon": "^2.0.7",
+        "path": "^0.12.7"
     }
-  }
-  
+}

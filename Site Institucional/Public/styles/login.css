@@ -13,7 +13,7 @@ html {
 }
 
 body{
-  background-image: url(../assets/icons/Frame\ 7.png);
+  background-image: url(../assets/icons/background-dark.png);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -33,7 +33,7 @@ body img{
   padding: 5px;
   display: flex;
   flex-direction: column;
-  padding-left: 5vh;
+  padding-left: 1vh;
 }
 
 .entrar input{
@@ -95,7 +95,7 @@ body img{
 }
 
 .botao{
-  margin-top: 5vh;
+  margin-top: 2vh;
   position: fixed;
   transition: 0.3s;
 }
@@ -107,8 +107,9 @@ body img{
 }
 
 #btn-entrar{
-  width: 400px;
-  height: 30px;
+  width: 63.5vh;
+  height: 35px;
+  font-size: 18px;
   border-radius: 10px;
   border: none;
   cursor: pointer;
@@ -117,20 +118,22 @@ body img{
 }
 
 .cadastrar{
+
   margin-top: 42%;
   position: fixed;
-  margin-left: 40vh;
+  right: 0;
 }
 
 .cadastrar button{
-  width: 200px;
-  height: 30px;
-  border-radius: 10px ;
+  width: 30vh;
+  height: 5vh;
+  border-radius: 10px 0px 0px 10px;
   border: none;
   cursor: pointer;
   color: white;
   background: linear-gradient(90deg, #5600D3, #B125E3);
   transition: 0.3s;
+  font-size: 18px;
 }
 
 .cadastrar button:hover{
@@ -141,4 +144,19 @@ transition: 0.3s;
 .cadastrar button:active{
   background-color: white;
   transition: 0.3s;
+}
+
+#div_mensagem{
+  margin-top: 1.5vh;
+  padding-left:5px;
+}
+
+#div_mensagem p{
+  color: white;
+  font-size: 16px;
+  transform: translateY(0px);
+  padding: 0px;
+  color: white;
+  background: #1A1A1A;
+  margin: 0;
 }

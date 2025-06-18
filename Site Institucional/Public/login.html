@@ -10,11 +10,11 @@
 </head>
 
 <body>
-    <img src="./assets/icons/ChatGPT Image 17 de jun. de 2025, 11_55_11.png" alt="">
+    <img src="./assets/icons/fone-roxo.png" alt="">
 
     <div class="entrar">
         <div class="logo">
-            <img src="./assets/imgs/WhatsApp_Image_2025-06-02_at_18.58.59-removebg-preview.png" alt="">
+            <img src="./assets/imgs/logo.png" alt="">
         </div>
         <div class="titulo">
             <h1>LOGIN</h1>
@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="cadastrar">
-            <button>Cadastrar</button>
+            <a href="cadastro.html"><button>Cadastrar</button></a>
         </div>
     </div>
 
@@ -47,13 +47,13 @@
         var senha = input_senha.value
 
         if (email == `` || senha == ``) {
-            div_mensagem.innerHTML = `Preencha todos os campos`
+            div_mensagem.innerHTML = `<p> Preencha todos os campos </p>`
         } else if (!email.includes('@') || !email.includes('.')) {
-            div_mensagem.innerHTML = `O email deve conter @ e .`
+            div_mensagem.innerHTML = `<p> O email deve conter @ e . </p>`
         } else if (email.indexOf('@') === 0 || email.lastIndexOf('.') === email.length - 1) {
-            div_mensagem = `Email inválido: @ não pode ser o primeiro caractere e . não pode ser o último`
+            div_mensagem.innerHTML = `<p> Email inválido: @ não pode ser o primeiro caractere e . não pode ser o último </p>`
         } else if (senha.length < 8) {
-            div_mensagem = `A senha deve conter pelo menos 8 caracteres`
+            div_mensagem.innerHTML = `<p> A senha deve conter pelo menos 8 caracteres </p>`
         } else {
 
             fetch("/usuarioRoute/autenticar", {
@@ -79,7 +79,7 @@
                         sessionStorage.ID_USUARIO = json.idUsuario;
 
                         div_mensagem.innerHTML = `Login bem sucedido`
-                        window.location = "./playlist.html"
+                        window.location = "./perfil.html"
                     });
 
                 } else {

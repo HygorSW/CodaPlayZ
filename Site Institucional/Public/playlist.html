@@ -5,27 +5,228 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="./styles/playlist.css">
 </head>
 
-<body onload="buscarMusica()">
+<body onload="buscarPlaylist(); buscarMusica(), buscarEspecifica()">
+    <div class="main">
 
+        <div class="navbar">
+            <a href="./perfil.html" class="home">
+                <h1>HOME</h1>
+            </a>
+            <a href="./player.html" class="home">
+                <h1>MÚSICAS</h1>
+            </a>
+            <div class="user">
+                <div class="userInfo">
+                    <p>Matheus Gomes</p>
+                    <p>Matheus@gmail.com</p>
+                </div>
+                <img src="./assets/imgs/playlistPage/snoop.png" alt="">
+            </div>
+        </div>
+
+        <div class="PlaylistGeral" id="div">
+        </div>
+
+        <div class="containerPlaylist">
+            <div class="containerEspecifica">
+                <img src="./assets/imgs/playlistPage/snoop.png" alt="">
+                <div class="infoEspecifica">
+                    <h1 id="tituloEspecifica">TITULO DA PLAYLIST</h1> <button class="btnHeader"
+                        onclick="abrirModal()">MODAL</button>
+                    <div class="descEspecifica">
+                        <p id="descricaoEspecifica">snoop dogg melhores músicas 2001’sF</p>
+                    </div>
+                    <div class="btnEspecifica">PLAY</div>
+                </div>
+            </div>
+
+            <div class="containerMusicas">
+                <div class="divMusicaAtual">
+                    <img src="./assets/imgs/playlistPage/snoop.png" alt="">
+                    <div class="tituloMusicaAtual">
+                        <h1>TITULO</h1>
+                    </div>
+                    <div class="playerDiv">
+                        <button class="btnSpotify" id="prev">⏮️ Anterior</button>
+                        <button class="btnSpotify" id="play">▶️ Tocar</button>
+                        <button class="btnSpotify" id="pause" style="display:none;">⏸️ Pausar</button>
+                        <button class="btnSpotify" id="next">⏭️ Próximo</button>
+                    </div>
+                </div>
+
+                <div class="listaMusicas">
+                    <div class="musicaDiv">
+                        <div class="infos">
+                            <h1>1</h1>
+                            <h1>TITULO DA MUSICA</h1>
+                            <p>ARTISTA</p>
+                        </div>
+                        <div class="btnFechar">
+                            <h1>X</h1>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <button onclick="deletarMusica(2)">excluir</button>
+
+    <!-- modal  -->
+    <div id="modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="inputGroup">
+                <label for="input_nome">Nome Playlist</label>
+                <input id="input_nome" type="text" style="width: 300px;">
+            </div>
+            <div class="inputGroup">
+                <label for="input_descricao">Descrição</label>
+                <textarea name="input_descricao" id="input_descricao"
+                    style="min-width: 300px;width: 90%; max-width: 300px; max-height: 100px; min-height: 100px;"></textarea>
+            </div>
+
+            <div class="btnGroup">
+                <button class="btnModal" onclick="EditarPlaylist()">Atualizar playlist</button>
+                <button class="btnModal" onclick="fecharModal()">Fechar</button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
 <script>
-    var token = ''
-    var idPlaylist = sessionStorage.PLAYLIST
+    function abrirModal() {
+        document.getElementById('modal').classList.remove('hidden')
+    }
+
+    function fecharModal() {
+        document.getElementById('modal').classList.add('hidden')
+    }
+
+    function atualizarPage() {
+
+    }
+
+    var idUsuario = sessionStorage.ID_USUARIO;
+    var idPlaylist = sessionStorage.PLAYLIST;
+
+    function buscarEspecifica() {
+        div.innerHTML = `<div class="tituloPlay">PLAYLIST</div>`;
+        fetch(`/playlistRoute/buscarEspecifica?pkPlaylist=${idPlaylist}`, {
+            method: "GET"
+        })
+            .then(response => response.json())
+            .then(playlistEspecifica => {
+                console.log(playlistEspecifica);
+                tituloEspecifica.innerHTML = `${playlistEspecifica[0].nome}`;
+                descricaoEspecifica.innerHTML = `${playlistEspecifica[0].descriacao}`;
+
+            })
+    }
+
+
+
+    function buscarPlaylist() {
+        idUsuario = sessionStorage.ID_USUARIO;
+        div.innerHTML = `<div class="tituloPlay">PLAYLIST</div>`;
+        fetch(`/perfilRoute/buscarPlaylist?pkUsuario=${idUsuario}`, {
+            method: "GET"
+        })
+            .then(response => response.json())
+            .then(playlist => {
+                playlist.forEach(resultado => {
+                    div.innerHTML += `
+                        <button class="playlistCard" onclick="redirecionarPagina('${resultado.idPlaylist}')">
+                <div class="containerTitulo">
+
+                    <div id="tituloCard"><h1>${resultado.nome}</h1></div>
+                    <div id="legend-card">Descrição</div>
+                </div>
+
+                <div class="fotterCard">
+                    <div class="btnPlay">PLAY</div>
+                </div>
+
+                    </button>
+                    `
+                })
+            })
+    }
+
+    function redirecionarPagina(idPlaylist) {
+        sessionStorage.PLAYLIST = idPlaylist
+        window.location.href = `playlist.html`
+    }
+
+    function EditarPlaylist() {
+        var nomePlaylist = input_nome.value;
+        var descricaoPlaylist = input_descricao.value;
+
+        if (nomePlaylist == `` || descricaoPlaylist == ``) {
+            div_mensagem.innerHTML = `Preencha todos os campos`
+        } else if (nomePlaylist.length > 30) {
+            div_mensagem.innerHTML = `O nomePlaylist pode ter no maximo 30 letras`
+        } else if (nomePlaylist.length < 3) {
+            div_mensagem.innerHTML = `A senha deve conter pelo menos 3 caracteres`
+        } else if (idPlaylist == undefined) {
+            div_mensagem.innerHTML = `É necessário estar logado para criar uma playlist`
+        } else {
+            fetch("/playlistRoute/editarPlaylist", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    playlistServer: idPlaylist,
+                    descricaoServer: descricaoPlaylist,
+                    nomePlaylistServer: nomePlaylist
+                })
+            }).then(function (resposta) {
+                console.log("ESTOU NO THEN DO entrar()!")
+
+                if (resposta.ok) {
+                    console.log(resposta);
+
+                    resposta.json().then(json => {
+                        console.log(json);
+                        console.log(JSON.stringify(json));
+                        alert(`Alteração de playlist - sucesso`)
+                        window.location = "./playlist.html"
+                    });
+
+                } else {
+                    console.log("Houve um erro ao tentar realizar o edição!")
+                    resposta.text().then(texto => {
+                        console.error(texto);
+                    });
+                }
+
+            }).catch(function (erro) {
+                console.log(erro);
+            })
+        }
+    }
+
 
     function buscarMusica() {
+        idPlaylist = sessionStorage.PLAYLIST;
+
         fetch(`/musicaRoute/buscarMusica?idPlaylist=${idPlaylist}`, {
             method: "GET"
         })
             .then(response => response.json())
             .then(dadosMusica => {
                 dadosMusica.forEach(resultado => {
-                    var idMusica = dadosMusica.idMusica
+                    var idMusica = resultado.idMusica
 
-                    fetch(`https://api.spotify.com/v1/tracks/${dadosMusica.idSpotify}`, {
+                    fetch(`https://api.spotify.com/v1/tracks/${resultado.idSpotify}`, {
                         headers: { 'Authorization': 'Bearer ' + token }
                     })
                         .then(res => res.json())
@@ -52,7 +253,7 @@
                                         `
 
                                 artista.forEach(dadosArtista => {
-                                    div.innerHTML += `<p>Artista:</p> ${artista.name}<br>`
+                                    div.innerHTML += `<p>Artista:</p> ${dadosArtista.name}<br>`
                                 })
                             }
                         })
@@ -63,6 +264,8 @@
                 })
             })
     }
+
+    //  função nativa - tocar musica
 
     window.onSpotifyWebPlaybackSDKReady = () => {
         var player = new Spotify.Player({
@@ -78,6 +281,7 @@
         player.connect()
     }
 
+    //  chama função tocar musica
     function tocar(uri) {
         if (!deviceId) {
             alert('Player não está pronto. Aguarde...')
@@ -94,6 +298,8 @@
         })
     }
 
+
+    // deletar musica
     function deletarMusica(idMusica) {
         var musicaDeletar = idMusica
 
@@ -133,4 +339,84 @@
         })
     }
 
+    // Função para pegar o token do hash da URL
+    function getTokenFromUrl() {
+        const hash = window.location.hash.substring(1);
+        const params = new URLSearchParams(hash);
+        return params.get('access_token');
+    }
+
+    const token = getTokenFromUrl();
+
+    if (!token) {
+        document.getElementById('track-info').textContent = 'Token não encontrado. Por favor, faça login novamente.';
+    } else {
+        // Define a função global que o SDK chama quando estiver pronto
+        window.onSpotifyWebPlaybackSDKReady = () => {
+            const player = new Spotify.Player({
+                name: 'Meu Web Player',
+                getOAuthToken: cb => { cb(token); },
+                volume: 0.5
+            });
+
+            player.addListener('initialization_error', ({ message }) => { console.error('Erro na inicialização:', message); });
+            player.addListener('authentication_error', ({ message }) => {
+                console.error('Erro de autenticação:', message);
+                document.getElementById('track-info').textContent = 'Erro de autenticação, faça login novamente.';
+            });
+            player.addListener('account_error', ({ message }) => { console.error('Erro conta:', message); });
+            player.addListener('playback_error', ({ message }) => { console.error('Erro playback:', message); });
+
+            player.addListener('player_state_changed', state => {
+                if (!state) {
+                    document.getElementById('track-info').textContent = 'Nenhuma música tocando';
+                    return;
+                }
+                const currentTrack = state.track_window.current_track;
+                document.getElementById('track-info').textContent = `${currentTrack.name} — ${currentTrack.artists.map(a => a.name).join(', ')}`;
+                if (state.paused) {
+                    document.getElementById('play').style.display = 'inline-block';
+                    document.getElementById('pause').style.display = 'none';
+                } else {
+                    document.getElementById('play').style.display = 'none';
+                    document.getElementById('pause').style.display = 'inline-block';
+                }
+            });
+
+            player.addListener('ready', ({ device_id }) => {
+                console.log('Pronto com device ID', device_id);
+                // Transfere o playback para o Web Playback SDK
+                fetch('https://api.spotify.com/v1/me/player', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        device_ids: [device_id],
+                        play: false
+                    }),
+                }).then(() => {
+                    console.log('Playback transferido para o player da web');
+                }).catch(console.error);
+            });
+
+            player.addListener('not_ready', ({ device_id }) => {
+                console.log('Player ficou offline', device_id);
+            });
+
+            player.connect();
+
+            // Botões de controle
+            document.getElementById('play').onclick = () => player.resume().catch(console.error);
+            document.getElementById('pause').onclick = () => player.pause().catch(console.error);
+            document.getElementById('next').onclick = () => player.nextTrack().catch(console.error);
+            document.getElementById('prev').onclick = () => player.previousTrack().catch(console.error);
+        };
+
+        // Carrega o SDK do Spotify
+        const script = document.createElement('script');
+        script.src = "https://sdk.scdn.co/spotify-player.js";
+        document.body.appendChild(script);
+    }
 </script>
