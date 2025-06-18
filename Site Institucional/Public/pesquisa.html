@@ -21,13 +21,15 @@
     </div>
 
     <div class="main">
-        <div class="header"><input type="text" id="input_pesquisa" placeholder="PESQUISAR..."></div>
+        <div class="header"><input type="text" id="input_pesquisa" placeholder="PESQUISAR..." oninput="buscarMusica()">
+        </div>
         <div class="container">
             <div class="navContainer">
                 <h1>MÚSICAS</h1>
             </div>
-            <div class="listaMusica">
-                <div id="musicaDiv"><img src="./assets/imgs/playlistPage/snoop.png" alt="">
+            <div class="listaMusica" id="lista">
+                <div id="musicaDiv">
+                    <img src="./assets/imgs/playlistPage/snoop.png" alt="">
                     <div class="infoMusic">
                         <h1>titulo</h1>
                         <p>artista</p>
@@ -66,15 +68,15 @@
     }
 
     function buscarMusica() {
-        musicaPesquisar = input_musica.value
+        musicaPesquisar = input_pesquisa.value
 
-        fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(nome)}&type=track`, {
+        fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(musicaPesquisar)}&type=track`, {
             headers: { 'Authorization': 'Bearer ' + token }
         })
             .then(res => res.json())
             .then(dados => {
-                var resultado = document.getElementById('resultado')
-                resultado.innerHTML = ""
+
+                lista.innerHTML = ''
 
                 var musicas = dados.tracks.items
 
@@ -86,14 +88,17 @@
                     var uri = musica.uri
                     var idSpotify = musica.id
 
-                    resultado.innerHTML += `
-                        <div>
-                            <img src="${imagem}" width="100"><br>
-                            <b>${nome}</b><br>
-                            <b>${artista}</b><br>
-                            <button onclick="tocar('${uri}')">Tocar</button>
-                            <button onclick="abrirPlaylist(${idSpotify})">+</button>
-                        </div>
+                    lista.innerHTML += `
+
+                        <img src="${imagem}" alt="">
+                    <div class="infoMusic">
+                        <h1>${nome}</h1>
+                        <p>${artista}</p>
+                    </div>
+                    <div class="btnMusica">
+                        <button onclick="abrirPlaylist(${idSpotify})">ADICIONAR MÚSICA</button>
+                        <button onclick="tocar('${uri}')">OUVIR</button>
+                    </div>
                     `
                 })
             })
