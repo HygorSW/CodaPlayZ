@@ -1,0 +1,165 @@
+body {
+    margin: 0px;
+    padding: 10px;
+    box-sizing: border-box;
+    font-family: "Barlow", sans-serif;
+    background: linear-gradient(239deg, #C315FF 22.85%, #FF45D2 85.89%);
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.div_esquerda_perfil {
+    width: 20%;
+    height: 90%;
+    padding: 2%;
+}
+
+.div_direita_perfil {
+    width: 60%;
+    height: 90%;
+    padding: 2%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+/* Contêiner do carrossel */
+.div_carrosel_perfil {
+    padding: 3%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    height: 60%;
+    overflow-x: auto;
+    gap: 20px;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    border-radius: 10px;
+    background: rgba(30, 30, 30, 0.80);
+}
+
+
+.div_quadrado_carrosel_perfil {
+    width: 29%;
+    height: 100%;
+    background-color: black;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 8px;
+    flex-shrink: 0;
+    font-family: "Judson", serif;
+}
+
+.div_quadrado_carrosel_perfil img {
+    width: 100%;
+}
+
+.div_quadrado_carrosel_perfil span {
+    font-size: 4vh;
+    height: 2vh;
+    width: 80%;
+}
+
+.div_quadrado_carrosel_perfil h4 {
+    width: 80%;
+}
+
+.playlist_musicas {
+    border-radius: 10px;
+    background: rgba(30, 30, 30, 0.80);
+    height: 100%;
+    padding: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.div_musicas_da_playlist {
+    height: 50%;
+    background-color: red;
+    overflow-y: scroll;
+    padding: 5px ;
+}
+
+.div_musicas_da_playlist div {
+    height: 25%;
+    margin-top: 2%;
+    width: 100%;
+    border-radius: 10px;
+    background: #1D1D1D;
+
+}
+
+.div_musica_atual_tocando {
+    height: 35%;
+    border-radius: 10px;
+    background: #1D1D1D;
+    padding: 5%;
+}
+.playlist_musicas span{
+color: #FFF;
+font-family: "Protest Strike";
+font-size: 2.5vh;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+}
+.div_musica_atual_tocando img{
+width:100%;
+height: 60%;
+  border-radius: 8px;
+object-fit: cover;
+}
+.bts_musica_atual_playlist{
+    height: 40%;
+    
+}
+.playlists_pessoais {
+  margin-top: 5%;
+  padding: 1%;
+  height: 40%;
+  width: 100%;
+  border-radius: 10px;
+  background: rgba(30, 30, 30, 0.80);
+  display: flex;
+  flex-direction: row;
+  overflow-y: hidden;
+}
+
+.div_das_playlist {
+  width: 95%;
+  height: 100%;
+  padding-top: 5%;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.divsao_playlists  {
+background-color: aqua;
+height: 100%;
+display: flex;
+flex-direction: row;
+}
+
+.divsao_playlists div {
+  background-color: #C315FF;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  width: 30%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

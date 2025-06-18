@@ -1,6 +1,6 @@
 
-const clientId = '864869bc18a44add9a5269d78fc8c4d7';
-const clientSecret = '5337f5077a464628aba070ec057b58c8';
+const clientId = '2c1cdb1b3cec451c8bba713c6f27570d';
+const clientSecret = '6a738184530a4f3db28a4709dc13f89b';
 
 async function pegarToken(req, res) {
   const authString = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
