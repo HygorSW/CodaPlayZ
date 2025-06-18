@@ -116,6 +116,7 @@ body {
     transition: 0.5s;
     cursor: pointer;
 }
+
 .playlistCard:hover {
     transform: scale(1.05);
 }
@@ -179,7 +180,8 @@ body {
     transition: 0.5s;
     cursor: pointer;
 }
-.btnEspecifica:hover{
+
+.btnEspecifica:hover {
     transform: scale(1.05);
 }
 
@@ -239,7 +241,15 @@ body {
     justify-content: center;
 }
 
-
+.tituloPlay {
+    width: 90%;
+    display: flex;
+    justify-content: flex-start;
+    min-height: 30px;
+    align-items: flex-end;
+    font-size: 40px;
+    margin-top: 20px;
+}
 
 .musicaDiv {
     display: flex;
@@ -316,17 +326,8 @@ body {
     justify-content: flex-start;
     min-height: 30px;
     align-items: flex-end;
-    font-size: 20px;
-    max-height: 30px;
-}
-
-.tituloPlay {
-    width: 90%;
-    display: flex;
-    justify-content: flex-start;
-    min-height: 30px;
-    align-items: flex-end;
-    font-size: 20px;
+    font-size: 40px;
+    margin-top: 20px;
 }
 
 #tituloEspecifica {
@@ -406,7 +407,8 @@ label {
     color: black;
 }
 
-#input_descricao, #input_nome{
+#input_descricao,
+#input_nome {
     color: black;
 }
 
