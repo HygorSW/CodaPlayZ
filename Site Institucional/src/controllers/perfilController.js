@@ -41,7 +41,7 @@ function buscarPlaylist(req, res) {
 }
 
 function buscarMusicasRecentes(req, res) {
-    var pkUsuario = req.query.idUsuario;
+    var pkUsuario = req.query.pkUsuario;
 
     perfilModel.buscarMusicasRecentes(pkUsuario)
         .then(
